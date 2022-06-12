@@ -1,6 +1,6 @@
 import numpy as np
 from transformers import CLIPProcessor, CLIPModel
-from ml.helpers import get_image_from_url
+from helpers import get_image_from_url
 
 
 class ClipModel:
@@ -20,7 +20,7 @@ class ClipModel:
         processed_input = self.processor(return_tensors="pt", **input_dict)
         embedding = get_features(**processed_input).tolist()
         embedding /= np.linalg.norm(embedding)
-        return embedding
+        return embedding.ravel().tolist()
 
 
 class MediaProcessor():
