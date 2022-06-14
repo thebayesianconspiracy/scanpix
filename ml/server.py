@@ -12,8 +12,13 @@ def hello_world():
 @app.route("/process_image")
 def process_image():
     url = request.args.get('url', type=str)
-    embedding = media_processor.process_image(url)
-    return jsonify({"embedding": embedding})
+    return jsonify(media_processor.process_image(url))
+
+
+@app.route("/process_text")
+def process_text():
+    text = request.args.get('text', type=str)
+    return jsonify(media_processor.process_text(text))
 
 
 if __name__ == '__main__':

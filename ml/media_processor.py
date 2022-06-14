@@ -1,6 +1,7 @@
 import numpy as np
 from transformers import CLIPProcessor, CLIPModel
 from helpers import get_image_from_url
+import imagehash
 
 
 class ClipModel:
@@ -29,7 +30,15 @@ class MediaProcessor():
 
     def process_image(self, url):
         img = get_image_from_url(url)
-        return self.clip_model.get_embedding(img, 'image')
+        img_hash = str(imagehash.average_hash(img))
+        res = {
+            'clip_embedding': self.clip_model.get_embedding(img, 'image'),
+            'hash': img_hash
+        }
+        return res
 
     def process_text(self, text):
-        return self.clip_model.get_embedding(text, 'text')
+        res = {
+            'clip_embedding': self.clip_model.get_embedding(text, 'text')
+        }
+        return res
