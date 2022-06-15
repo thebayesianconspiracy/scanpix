@@ -1,0 +1,26 @@
+body{
+    font-family: 'Lato';
+}
+
+#main-content{
+    text-align: center;
+}
+
+#jumbo-title{
+    font-weight: 900;
+    font-size: 100px;
+}
+
+img{
+    width: auto;
+    height: 100% !important;
+}
+
+.image{
+    height: 80%
+}
+
+#img-list{
+    margin: 100px;
+    padding: 20px;
+}
