@@ -1,0 +1,8 @@
+numpy
+flask
+media_processor
+Pillow
+transformers
+imagehash
+torch
+torchvision
