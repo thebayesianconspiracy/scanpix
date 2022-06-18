@@ -7,8 +7,9 @@ function createCard(img, text){
     
     cardDiv.className = 'card';
     imageDiv.className = 'image';
+    imageDiv.style.height = "200px";
     image.setAttribute("data-src", img);
-    image.setAttribute("height", 400);
+    image.style.objectFit = 'cover';
     contentDiv.className = 'extra content';
     content.innerHTML = text;
 
@@ -20,12 +21,9 @@ function createCard(img, text){
 }
 
 function displayImages(imageScores){
-    const img_location = "file:///home/nuwandavek/Documents/rocketship/scanpix/data/images/";
+    const img_location = "file:///home/nuwandavek/Documents/rocketship/scanpix/data/images2/";
     const imgList = document.getElementById("img-list");
     imgList.innerHTML = '';
-    console.log(imageScores);
-    imageScores = imageScores.sort((a, b) => { return b[1] - a[1] } )
-    console.log(imageScores);
     
     imageScores.forEach(function (item, index) {
         const itemLoc = img_location + item[0];
@@ -38,18 +36,27 @@ function displayImages(imageScores){
         type       : 'image',
         transition : 'fade in',
         duration   : 1000
-    })
-;
+    });
+}
+
+function displayResult(data){
+    const results = document.getElementById("results-meta");
+    const resultsText = document.getElementById("results-meta-text");
+    results.style.display = 'block';
+    resultsText.innerHTML = "Relevant Results: " + data.results.length + " / " + data.total_images +" images";
+    displayImages(data.results);
 }
 
 function getEmbedding(){
     const text = document.getElementById('search-bar').value;
+    console.log("Query: ", text)
     url = "http://0.0.0.0:5001/search?text="+text;
     fetch(url).then(function(response) {
         return response.json();
     }).then(function(data) {
-        // console.log(data);
-        displayImages(data);
+        console.log("Number of relevant results: ", data.results.length);
+        console.log("Total images: ", data.total_images);
+        displayResult(data);
     }).catch(function(e) {
         console.log(e);
     });
@@ -61,7 +68,6 @@ searchBtn.addEventListener('click', () => {
 })
 const searchBar = document.getElementById('search-bar');
 searchBar.addEventListener('keydown', (e) => {
-    console.log(e.key);
     if(e.key === 'Enter'){
         getEmbedding();
     }
