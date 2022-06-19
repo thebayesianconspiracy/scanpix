@@ -42,7 +42,6 @@ This project consists of two almost parallel tracks: `research` and `software`. 
 
 ---
 # Usage (ToDo: Add better instructions!)
-- It also needs electron installed for the app
 
 ```
 # Installation
