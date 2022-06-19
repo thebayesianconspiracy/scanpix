@@ -46,7 +46,7 @@ def search():
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--index-loc', type=str, help='location of the index file')
+    parser.add_argument('--index-loc', type=str, help='location of the index file', default="../data/")
     args = parser.parse_args()
 
     INDEX_LOC = args.index_loc

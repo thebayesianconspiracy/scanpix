@@ -41,6 +41,36 @@ This project consists of two almost parallel tracks: `research` and `software`. 
 5. Video search (smart sampling frames)
 
 ---
+# Usage (ToDo: Add better instructions!)
+- It also needs electron installed for the app
+
+```
+# Installation
+# 1. Backend
+# This repo needs pytorch to be installed
+# Hopefully you're using pipenv / virtualenv / anaconda
+# so that you don't mess up your package versions
+pip install -r requirements.txt
+
+# 2. Frontend app (you can skip this if you're just running the nbs and server)
+# cd app && yarn install
+-------------------------------------------------------------------------
+
+# Running
+# 1. Running the ML server
+cd ml && python server.py --index-loc ../data/
+# This should start up the ml server
+# It takes a while the first time you run it
+
+# 2. Running the notebook
+cd nbs && jupyter notebook
+
+# 3. Running the app
+cd app && yarn start
+```
+
+
+---
 ## Questions to think about
 - Do we ever learn from multiple users? How do we get feedback on performance/quality? User generated? Self generated?
 - How do we push new models?

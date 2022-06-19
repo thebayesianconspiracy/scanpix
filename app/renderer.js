@@ -21,7 +21,7 @@ function createCard(img, text){
 }
 
 function displayImages(imageScores){
-    const img_location = "file:///home/nuwandavek/Documents/rocketship/scanpix/data/images2/";
+    const img_location = "file://"+ __dirname.replace('/app', '/data/images/');
     const imgList = document.getElementById("img-list");
     imgList.innerHTML = '';
     
