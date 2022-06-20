@@ -4,6 +4,7 @@ body{
 
 #main-content{
     text-align: center;
+    min-height: 100%;
 }
 
 #jumbo-title{
@@ -23,4 +24,10 @@ img{
 #img-list{
     margin: 100px;
     padding: 20px;
+}
+
+#footer{
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
 }

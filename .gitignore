@@ -1,4 +1,7 @@
-data/
+data/images2
+data/images3
+data/images4
+data/index2.json
 */__pycache__/
 */.ipynb_checkpoints/
 */node_modules
