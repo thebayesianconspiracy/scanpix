@@ -1,0 +1,8 @@
+flask==2.1.2
+numpy==1.22.3
+pillow==9.0.1
+requests==2.27.1
+transformers==4.19.2
+imagehash
+torch
+torchvision
