@@ -1,0 +1,6 @@
+services:
+  scanpix-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: scanpix-server:1.0
