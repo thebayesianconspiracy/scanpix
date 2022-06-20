@@ -21,13 +21,14 @@ function createCard(img, text){
 }
 
 function displayImages(imageScores){
-    const img_location = "file://"+ __dirname.replace('/app', '/data/images/');
     const imgList = document.getElementById("img-list");
     imgList.innerHTML = '';
     
     imageScores.forEach(function (item, index) {
-        const itemLoc = img_location + item[0];
-        const itemText = item[0] + ": " + String(Math.round(item[1] * 100.0) / 100.0);
+        console.log(item);
+        const itemLoc = "file://" + item[1];
+        console.log(itemLoc);
+        const itemText = item[0] + ": " + String(Math.round(item[2] * 100.0) / 100.0);
         imgList.appendChild(createCard(itemLoc, itemText))
     });
 
