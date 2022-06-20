@@ -4,7 +4,7 @@ FROM python:3.8-slim
 WORKDIR /scanpix
 
 # install python dependencies and expose port
-COPY requirements.txt requirements.txt
+COPY .docker_requirements.txt requirements.txt
 RUN pip3 install -r requirements.txt
 EXPOSE 5001
 
