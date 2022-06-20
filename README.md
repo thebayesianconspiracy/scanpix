@@ -8,28 +8,68 @@ scanpix is a `local Google Photos`. It allows you to search local images and vid
 - App to search for images/videos using text
 - Extend to a general `metadata(file)` -> `semantic search` paradigm
 
-### Components
-- Worker(s) - Service thats always up which takes disk as input, manages state of indexing and runs model on new images and sends to DB
-- Databse - DB to store all indexing results
-- Search FE - Frontend app to search on - Electron
-- Research nbs - Jupyter Notebook(s) to play around on model training and evaluation
+## Components
 
-## v1.0
+```mermaid
+graph LR
+    A((Media Files)) --> |background process|B(Worker)
+    B --> |index| C[(Index Store)]
+    C -->G
+    E((Search Query)) --> F(App FE)
+    F --> |index|G{Similarity Search}
+    G --> H[Rank Ordered Results]
+    
+```
+---
+## Contribution / Priority Notes
 
-### Tasks
-- To run using docker compose
-- Worker to index images
-- Decide and use appropriate similarity search engine
+This project consists of two almost parallel tracks: `research` and `software`. Research priority is to experiment and get the features working in a notebook, while `software` productionizes it. All tasks below are in decreasing order of priority.
+
+### Software
+1. To run using docker compose
+2. Worker to index images in the background
+3. Decide and use appropriate similarity search engine
+4. FE app to view images
+5. Advanced Search
+6. Tag pictures
+
+### Research
+1. Get more model outputs (can we augment `CLIP` with object detection and `GLOVE` embeddings?)
+2. Detect faces
+3. Personalised search (tag friends; search by names)
+4. Negative search ("photos with A and without B")
+5. Video search (smart sampling frames)
+
+---
+# Usage (ToDo: Add better instructions!)
+
+```
+# Installation
+# 1. Backend
+# This repo needs pytorch to be installed
+# Hopefully you're using pipenv / virtualenv / anaconda
+# so that you don't mess up your package versions
+pip install -r requirements.txt
+
+# 2. Frontend app (you can skip this if you're just running the nbs and server)
+# cd app && yarn install
+-------------------------------------------------------------------------
+
+# Running
+# 1. Running the ML server
+cd ml && python server.py --index-loc ../data/
+# This should start up the ml server
+# It takes a while the first time you run it
+
+# 2. Running the notebook
+cd nbs && jupyter notebook
+
+# 3. Running the app
+cd app && yarn start
+```
 
 
-## v1.1
-
-### Features
-- Personalised search
-- Negative search
-- Video search
-
-
+---
 ## Questions to think about
 - Do we ever learn from multiple users? How do we get feedback on performance/quality? User generated? Self generated?
 - How do we push new models?
