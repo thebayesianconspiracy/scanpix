@@ -5,6 +5,7 @@ body{
 #main-content{
     text-align: center;
     min-height: 100%;
+    position: relative;
 }
 
 #jumbo-title{
