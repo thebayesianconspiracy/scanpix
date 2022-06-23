@@ -4,8 +4,8 @@ FROM python:3.8-slim
 WORKDIR worker-app/
 
 # Copying directories and installing dependencies
-COPY . .
-COPY ../data .
+COPY /worker .
+COPY /data data/
 RUN  pip3 install watchdog
 
 # start monitoring

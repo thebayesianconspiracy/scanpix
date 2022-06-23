@@ -10,7 +10,7 @@ services:
       - "./data:/scanpix/data"
   indexer-service:
     build:
-      context: ./worker
+      context: .
       dockerfile: Dockerfile
     image: indexer-service:1.0
     volumes:
