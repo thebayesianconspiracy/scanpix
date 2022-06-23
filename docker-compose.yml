@@ -8,3 +8,10 @@ services:
       - "5001:5001"
     volumes:
       - "./data:/scanpix/data"
+  indexer-service:
+    build:
+      context: ./worker
+      dockerfile: Dockerfile
+    image: indexer-service:1.0
+    volumes:
+      - ".data:/worker-app/data"
