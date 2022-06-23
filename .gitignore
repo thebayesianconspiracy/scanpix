@@ -6,3 +6,5 @@ data/index2.json
 */.ipynb_checkpoints/
 */node_modules
 */out
+.DS_Store
+.idea
