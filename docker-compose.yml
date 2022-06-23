@@ -11,7 +11,7 @@ services:
   indexer-service:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: worker/Dockerfile
     image: indexer-service:1.0
     volumes:
       - ".data:/worker-app/data"
