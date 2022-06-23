@@ -10,7 +10,6 @@ EXPOSE 5001
 
 # copy directories
 COPY ml/ ml/
-COPY data/ data/
 
 # start server
-CMD ["python3", "ml/server.py", "--index-loc", "data"]
+CMD ["python3", "ml/server.py", "--index-loc", "data/"]

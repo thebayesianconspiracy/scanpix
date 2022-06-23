@@ -1,17 +1,19 @@
 services:
-  scanpix-server:
+  scanpix:
     build:
       context: .
       dockerfile: Dockerfile
-    image: scanpix-server:1.0
+    image: scanpix-server
     ports:
       - "5001:5001"
     volumes:
       - "./data:/scanpix/data"
-  indexer-service:
+  indexer:
     build:
       context: .
       dockerfile: worker/Dockerfile
-    image: indexer-service:1.0
+    image: indexer-service
+    ports:
+      - "5000:5000"
     volumes:
-      - ".data:/worker-app/data"
+      - "./data:/worker-app/data"

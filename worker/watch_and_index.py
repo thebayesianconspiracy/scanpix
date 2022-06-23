@@ -48,5 +48,5 @@ class MyHandler(FileSystemEventHandler):
 
 
 if __name__ == "__main__":
-    w = Watcher("../data/images", MyHandler())
+    w = Watcher("/worker-app/data/images", MyHandler())
     w.run()
