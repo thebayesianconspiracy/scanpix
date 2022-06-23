@@ -11,13 +11,20 @@ const createWindow = () => {
         }
     })
     win.loadFile('index.html')
+    return win
 }
 
 app.whenReady().then(() => {
-    createWindow()
+    mainWindow = createWindow()
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) createWindow()
     })
+
+    mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+        require('electron').shell.openExternal(url);
+        return {action: 'deny'}
+    })
+      
 })
 
 app.on('window-all-closed', () => {
