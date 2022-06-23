@@ -2,17 +2,16 @@ import requests
 import json
 
 
-BASEURL = "http://0.0.0.0:5001/process_image"
-IMAGE_PATH = "../data/images"
+BASEURL = "http://127.0.0.1:5001/process_image"
+IMAGE_PATH = "/scanpix/data/images"
 
 
 class Indexer:
 
     def index(self, img_name):
-        res = requests.get(url=BASEURL, params={'url': f"{IMAGE_PATH}/{img_name}"})
-        print(f"response: {res}")
-        #res['file_name'] = img_name
-        #res['file_location'] = f"{IMAGE_PATH}/{img_name}"
+        res = requests.get(url=BASEURL, params={'url': f"{IMAGE_PATH}/{img_name}"}).json()
+        res['file_name'] = img_name
+        res['file_location'] = f"{IMAGE_PATH}/{img_name}"
         return res
 
     def dump_to_json(self, json_index):

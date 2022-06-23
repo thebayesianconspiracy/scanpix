@@ -43,7 +43,6 @@ class MyHandler(FileSystemEventHandler):
             print(f"New image file: {file_name} created.....")
             indexer = Indexer()
             json_res = indexer.index(file_name)
-            print("json_res: ", json_res)
             indexer.dump_to_json(json_res)
             print(f"Dumping json of {file_name} to index.json....")
 
