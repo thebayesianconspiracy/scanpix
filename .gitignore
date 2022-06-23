@@ -8,3 +8,4 @@ data/index2.json
 */out
 .DS_Store
 .idea
+package-lock.json
