@@ -69,7 +69,7 @@ cd app && yarn start
 ```
 
 ## Running using Docker Compose
-Starting the ml server in docker consists of 2 steps:
+Starting the ml server and indexer in docker consists of 2 steps:
 * Build the image -> ``docker-compose build``
 * start the container -> ``docker-compose up -d``
 
