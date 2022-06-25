@@ -1,5 +1,6 @@
 import requests
 import json
+import tqdm
 import os
 
 BASEURL = "http://0.0.0.0:5001/process_image"
