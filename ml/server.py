@@ -1,20 +1,29 @@
+import os
 import json
 import argparse
 import numpy as np
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template, send_from_directory
 from media_processor import MediaProcessor
 from tqdm import tqdm
 
 INDEX_LOC = None
+IMG_LOC = None
 RESULT_LIMIT = 25
 SCORE_THRESHOLD = 0.20
+TEMPLATE_DIR = os.path.abspath('../app')
+STATIC_FOLDER = os.path.abspath('../app')
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder=TEMPLATE_DIR, static_folder=STATIC_FOLDER, static_url_path='')
 
 
 @app.route("/")
 def hello_world():
-    return jsonify("scanpix ml server")
+    return render_template('index.html')
+
+
+@app.route("/image/<path:name>")
+def serve_image(name):
+    return send_from_directory(IMG_LOC, name)
 
 
 @app.route("/process_image")
@@ -49,7 +58,8 @@ if __name__ == '__main__':
     parser.add_argument('--index-loc', type=str, help='location of the index file', default="../data/")
     args = parser.parse_args()
 
-    INDEX_LOC = args.index_loc
+    INDEX_LOC = os.path.abspath(args.index_loc)
+    IMG_LOC = os.path.abspath(os.path.join(args.index_loc, "images"))
 
     media_processor = MediaProcessor()
     app.run(host="0.0.0.0", port=5001, debug=True)

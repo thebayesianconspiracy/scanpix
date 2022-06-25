@@ -1,3 +1,29 @@
+function isElectron(){
+    if (typeof navigator === 'object' && typeof navigator.userAgent === 'string' && navigator.userAgent.indexOf('Electron') >= 0) {
+        return true;
+    }
+    return false;
+}
+
+function getImageLocation(img_path){
+    if (isElectron()){
+        return "file://" + img_path;
+    } 
+    else {
+        var temp = img_path.split("/");
+        return "/image/" + temp[temp.length - 1];
+    }
+}
+
+function getQueryURL(){
+    if (isElectron()){
+        return "http://0.0.0.0:5001";
+    } 
+    else {
+        return "";
+    }
+}
+
 function createCard(img, text){
     var cardDiv = document.createElement("div");
     var imageDiv = document.createElement("div");
@@ -26,7 +52,7 @@ function displayImages(imageScores){
     
     imageScores.forEach(function (item, index) {
         console.log(item);
-        const itemLoc = "file://" + item[1];
+        const itemLoc = getImageLocation(item[1]);
         console.log(itemLoc);
         const itemText = item[0] + ": " + String(Math.round(item[2] * 100.0) / 100.0);
         imgList.appendChild(createCard(itemLoc, itemText))
@@ -40,6 +66,7 @@ function displayImages(imageScores){
     });
 }
 
+
 function displayResult(data){
     const results = document.getElementById("results-meta");
     const resultsText = document.getElementById("results-meta-text");
@@ -51,7 +78,7 @@ function displayResult(data){
 function getEmbedding(){
     const text = document.getElementById('search-bar').value;
     console.log("Query: ", text)
-    url = "http://0.0.0.0:5001/search?text="+text;
+    url = getQueryURL() + "/search?text="+text;
     fetch(url).then(function(response) {
         return response.json();
     }).then(function(data) {
