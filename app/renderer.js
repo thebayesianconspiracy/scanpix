@@ -47,16 +47,32 @@ function createCard(img, text){
 }
 
 function displayImages(imageScores){
+    console.log(imageScores);
     const imgList = document.getElementById("img-list");
     imgList.innerHTML = '';
     
+    const items = [];
     imageScores.forEach(function (item, index) {
-        console.log(item);
         const itemLoc = getImageLocation(item[1]);
-        console.log(itemLoc);
         const itemText = item[0] + ": " + String(Math.round(item[2] * 100.0) / 100.0);
-        imgList.appendChild(createCard(itemLoc, itemText))
+        // imgList.appendChild(createCard(itemLoc, itemText))
+        console.log(itemLoc, itemText);
+        items.push({src: itemLoc, srct: itemLoc, title: itemText})
     });
+
+    $("#img-list").nanogallery2('destroy');
+    $("#img-list").nanogallery2({
+        thumbnailHeight:  300,
+        thumbnailWidth:  'auto',
+        itemsBaseURL:     '',
+        thumbnailBorderVertical: 0,
+        thumbnailBorderHorizontal: 0,
+        thumbnailLabel: { valign: "bottom", position: 'overImage', align: 'left' },
+        viewerGalleryTWidth: 100,
+        viewerGalleryTHeight: 100,
+      
+        items: items
+      });
 
     $('.image img')
     .visibility({

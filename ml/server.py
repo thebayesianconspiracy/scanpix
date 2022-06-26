@@ -49,7 +49,7 @@ def search():
         score = np.dot(embedding, index['clip_embedding'])
         if score > SCORE_THRESHOLD:
             result.append((index['file_name'], index['file_location'], score))
-    result = sorted(result, key=lambda x: x[1], reverse=True)
+    result = sorted(result, key=lambda x: x[2], reverse=True)
     return jsonify({'results': result[:RESULT_LIMIT], 'total_images': len(img_index)})
 
 
