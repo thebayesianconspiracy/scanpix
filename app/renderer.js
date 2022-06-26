@@ -54,7 +54,10 @@ function displayImages(imageScores){
     const items = [];
     imageScores.forEach(function (item, index) {
         const itemLoc = getImageLocation(item[1]);
-        const itemText = item[0] + ": " + String(Math.round(item[2] * 100.0) / 100.0);
+        var itemText = item[0];
+        if (isElectron()){
+            itemText = itemText + ": " + String(Math.round(item[2] * 100.0) / 100.0);
+        }
         // imgList.appendChild(createCard(itemLoc, itemText))
         console.log(itemLoc, itemText);
         items.push({src: itemLoc, srct: itemLoc, title: itemText})
