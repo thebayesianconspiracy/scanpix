@@ -10,9 +10,9 @@ matplotlib==3.5.2
 matplotlib-inline==0.1.3
 notebook==6.4.11
 numpy==1.22.3
-numpy-base==1.22.3
 pandas==1.4.2
 pillow==9.0.1
 requests==2.27.1
 seaborn==0.11.2
 transformers==4.19.2
+imagehash==4.2.1
