@@ -119,3 +119,30 @@ searchBar.addEventListener('keydown', (e) => {
         getEmbedding();
     }
 })
+
+window.onload = function displayPrompts() {
+    if (!isElectron()){
+        const promptDiv = document.getElementById('prompts');
+        const instruction = document.createElement('p');
+        instruction.innerHTML = "Click and try these prompts: ";
+        instruction.className = "instruction";
+        promptDiv.appendChild(instruction);
+        const prompts = [
+            "pug",
+            "pug eating dinner",
+            "put with a cone",
+            "waterfall",
+        ]
+        prompts.forEach(function (item, index) {
+            var promptEle = document.createElement("a");
+            promptEle.className = "ui label black prompts";
+            promptEle.innerHTML = item;
+            promptEle.addEventListener("click", function(){
+                console.log(this.innerHTML);
+                document.getElementById('search-bar').value = this.innerHTML;
+                document.getElementById('search-button').click();
+            })
+            promptDiv.appendChild(promptEle)
+        })
+    }
+}

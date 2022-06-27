@@ -44,3 +44,13 @@ img{
     border-radius: 5px;
     text-shadow: none !important;
 }
+
+.prompts, .instruction{
+    margin: 30px 15px 30px 15px!important;
+}
+
+#prompts{
+    background-color: #eee;
+    margin: 30px;
+    border-radius: 10px;
+}
