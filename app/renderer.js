@@ -1,3 +1,29 @@
+function isElectron(){
+    if (typeof navigator === 'object' && typeof navigator.userAgent === 'string' && navigator.userAgent.indexOf('Electron') >= 0) {
+        return true;
+    }
+    return false;
+}
+
+function getImageLocation(img_path){
+    if (isElectron()){
+        return "file://" + img_path;
+    } 
+    else {
+        var temp = img_path.split("/");
+        return "/image/" + temp[temp.length - 1];
+    }
+}
+
+function getQueryURL(){
+    if (isElectron()){
+        return "http://0.0.0.0:5001";
+    } 
+    else {
+        return "";
+    }
+}
+
 function createCard(img, text){
     var cardDiv = document.createElement("div");
     var imageDiv = document.createElement("div");
@@ -21,16 +47,35 @@ function createCard(img, text){
 }
 
 function displayImages(imageScores){
+    console.log(imageScores);
     const imgList = document.getElementById("img-list");
     imgList.innerHTML = '';
     
+    const items = [];
     imageScores.forEach(function (item, index) {
-        console.log(item);
-        const itemLoc = "file://" + item[1];
-        console.log(itemLoc);
-        const itemText = item[0] + ": " + String(Math.round(item[2] * 100.0) / 100.0);
-        imgList.appendChild(createCard(itemLoc, itemText))
+        const itemLoc = getImageLocation(item[1]);
+        var itemText = item[0];
+        if (isElectron()){
+            itemText = itemText + ": " + String(Math.round(item[2] * 100.0) / 100.0);
+        }
+        // imgList.appendChild(createCard(itemLoc, itemText))
+        console.log(itemLoc, itemText);
+        items.push({src: itemLoc, srct: itemLoc, title: itemText})
     });
+
+    $("#img-list").nanogallery2('destroy');
+    $("#img-list").nanogallery2({
+        thumbnailHeight:  300,
+        thumbnailWidth:  'auto',
+        itemsBaseURL:     '',
+        thumbnailBorderVertical: 0,
+        thumbnailBorderHorizontal: 0,
+        thumbnailLabel: { valign: "bottom", position: 'overImage', align: 'left' },
+        viewerGalleryTWidth: 100,
+        viewerGalleryTHeight: 100,
+      
+        items: items
+      });
 
     $('.image img')
     .visibility({
@@ -39,6 +84,7 @@ function displayImages(imageScores){
         duration   : 1000
     });
 }
+
 
 function displayResult(data){
     const results = document.getElementById("results-meta");
@@ -51,7 +97,7 @@ function displayResult(data){
 function getEmbedding(){
     const text = document.getElementById('search-bar').value;
     console.log("Query: ", text)
-    url = "http://0.0.0.0:5001/search?text="+text;
+    url = getQueryURL() + "/search?text="+text;
     fetch(url).then(function(response) {
         return response.json();
     }).then(function(data) {
@@ -73,3 +119,30 @@ searchBar.addEventListener('keydown', (e) => {
         getEmbedding();
     }
 })
+
+window.onload = function displayPrompts() {
+    if (!isElectron()){
+        const promptDiv = document.getElementById('prompts');
+        const instruction = document.createElement('p');
+        instruction.innerHTML = "Click and try these prompts: ";
+        instruction.className = "instruction";
+        promptDiv.appendChild(instruction);
+        const prompts = [
+            "pug",
+            "pug eating dinner",
+            "put with a cone",
+            "waterfall",
+        ]
+        prompts.forEach(function (item, index) {
+            var promptEle = document.createElement("a");
+            promptEle.className = "ui label black prompts";
+            promptEle.innerHTML = item;
+            promptEle.addEventListener("click", function(){
+                console.log(this.innerHTML);
+                document.getElementById('search-bar').value = this.innerHTML;
+                document.getElementById('search-button').click();
+            })
+            promptDiv.appendChild(promptEle)
+        })
+    }
+}
