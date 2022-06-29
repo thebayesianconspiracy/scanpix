@@ -68,6 +68,12 @@ cd nbs && jupyter notebook
 cd app && yarn start
 ```
 
+## Running using Docker Compose
+Starting the ml server in docker consists of 2 steps:
+* Build the image -> ``docker-compose build``
+* start the container -> ``docker-compose up -d``
+
+Once the server has started you can use the electron frontend or the jupyter notebook to interact with the server.
 
 ---
 ## Questions to think about
