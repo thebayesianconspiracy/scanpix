@@ -8,25 +8,25 @@ from index_image import *
 ''' watcher class to monitor directories '''
 class Watcher:
 
-    def __init__(self, directory=".", handler=FileSystemEventHandler(), recursive=False):
+    def __init__(self, directories=".", handler=FileSystemEventHandler(), recursive=False):
         self.observer = Observer()
         self.handler = handler
-        self.directory = directory
+        self.directories = directories
         self.recursive = recursive
 
     # watcher starts monitoring the directory
     def run(self):
-        self.observer.schedule(
-            self.handler, self.directory, recursive=True)
+        for directory in self.directories:
+            self.observer.schedule(self.handler, directory, self.recursive)
         self.observer.start()
-        print(f"\nWatcher Running in {self.directory}/\n")
+        print("Observers started...")
+
         try:
             while True:
                 time.sleep(1)
         except:
             self.observer.stop()
         self.observer.join()
-        print("\nWatcher Terminated\n")
 
 '''function to extract filename from path'''
 def extract_filename(path):
@@ -41,12 +41,15 @@ class MyHandler(FileSystemEventHandler):
         file_name = extract_filename(event.src_path)
         if event.event_type == "created" and file_name.endswith(".jpg"):
             print(f"New image file: {file_name} created.....")
-            indexer = Indexer()
-            json_res = indexer.index(file_name)
-            indexer.dump_to_json(json_res)
-            print(f"Dumping json of {file_name} to index.json....")
+            # indexer = Indexer()
+            # json_res = indexer.index(file_name)
+            # indexer.dump_to_json(json_res)
+            # print(f"Dumping json of {file_name} to index.json....")
 
 
 if __name__ == "__main__":
-    w = Watcher("/worker-app/data/images", MyHandler())
+    paths  = []
+    with open("../.directories","r") as f:
+        paths = [i.strip() for i in f.readlines()]
+    w = Watcher(paths, MyHandler())
     w.run()
