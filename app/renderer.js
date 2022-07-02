@@ -119,6 +119,11 @@ searchBar.addEventListener('keydown', (e) => {
         getEmbedding();
     }
 })
+const uploadBtn = document.getElementById('upload-dir-button').addEventListener('click', () => {
+  window.postMessage({
+    type: 'select-dirs'
+  })
+})
 
 window.onload = function displayPrompts() {
     if (!isElectron()){
@@ -140,7 +145,8 @@ window.onload = function displayPrompts() {
             promptEle.addEventListener("click", function(){
                 console.log(this.innerHTML);
                 document.getElementById('search-bar').value = this.innerHTML;
-                document.getElementById('search-button').click();
+              document.getElementById('search-button').click();
+              document.getElementById('upload-dir-button').click();
             })
             promptDiv.appendChild(promptEle)
         })
