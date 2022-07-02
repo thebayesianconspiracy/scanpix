@@ -39,4 +39,8 @@ ipcMain.on('select-dirs', async (event, arg) => {
     properties: ['openDirectory']
   })
   console.log('directories selected', result.filePaths)
+  const fs = require('fs')
+  fs.appendFile('../.directories', '\n' + result.filePaths[0], (err) => {
+    if (err) throw err;
+  })
 })
