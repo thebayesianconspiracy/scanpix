@@ -4,8 +4,8 @@ body{
 
 #main-content{
     text-align: center;
-    min-height: 100%;
-    position: relative;
+    min-height: 90%;
+    /* position: relative; */
 }
 
 #jumbo-title{
@@ -23,12 +23,34 @@ img{
 }
 
 #img-list{
-    margin: 100px;
     padding: 20px;
 }
 
 #footer{
-    position: absolute;
-    bottom: 20px;
+    /* position: absolute; */
+    /* bottom: 20px; */
     width: 100%;
+    z-index: 999;
+    margin: 20px 0px 20px 0px;
+}
+
+.nGY2Gallery{
+    width: 100%;
+}
+
+.nGY2GThumbnailImageTitle{
+    padding: 5px 10px 5px 10px !important;
+    background: rgba(50, 50, 50, 0.8) !important;
+    border-radius: 5px;
+    text-shadow: none !important;
+}
+
+.prompts, .instruction{
+    margin: 30px 15px 30px 15px!important;
+}
+
+#prompts{
+    background-color: #eee;
+    margin: 30px;
+    border-radius: 10px;
 }
