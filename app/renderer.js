@@ -20,7 +20,7 @@ function getQueryURL(){
         return "http://0.0.0.0:5001";
     } 
     else {
-        return "";
+        return "http://0.0.0.0:8000";
     }
 }
 
