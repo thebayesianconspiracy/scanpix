@@ -20,7 +20,13 @@ function getQueryURL(){
         return "http://0.0.0.0:5001";
     } 
     else {
-        return "http://0.0.0.0:8000";
+        if (window.location.href.includes('localhost')) {
+            console.log("isDev");
+            return "http://0.0.0.0:8000";
+        }
+        else {
+            return "https://scanpix.co" ;
+        }
     }
 }
 
