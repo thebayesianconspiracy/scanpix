@@ -4,7 +4,6 @@ import os
 
 
 BASEURL = "http://scanpix:5001/process_image"
-IMAGE_PATH = "/scanpix/data/images"
 
 def append_to_json(filepath, data):
 
@@ -39,11 +38,12 @@ def append_to_json(filepath, data):
 
 class Indexer:
 
-    def index(self, img_name):
-        res = requests.get(url=BASEURL, params={'url': f"{IMAGE_PATH}/{img_name}"}).json()
+    def index(self, img_name, img_path):
+        print(img_path)
+        res = requests.get(url=BASEURL, params={'url': img_path }).json()
         res['file_name'] = img_name
-        res['file_location'] = f"{IMAGE_PATH}/{img_name}"
+        res['file_location'] = img_path
         return res
 
     def dump_to_json(self, json_index):
-        append_to_json("data/index.json", json_index)
+        append_to_json("/worker-app/index.json", json_index)

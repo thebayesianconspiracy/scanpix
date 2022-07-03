@@ -8,6 +8,7 @@ def generate_volume_lines():
 def generate_volume_string(container_root_dir):
     import re
     volume_lines = generate_volume_lines()
+    volume_lines = ['./.directories','./data/index.json'] + volume_lines
     volume_string = "volumes:\n"
     for line in volume_lines:
         line = line.strip("\n")

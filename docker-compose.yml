@@ -1,3 +1,4 @@
+
 services:
   scanpix:
     build:
@@ -7,7 +8,11 @@ services:
     ports:
       - "5001:5001"
     volumes:
-      - "./data:/scanpix/data"
+      - "./.directories:/scanpix/.directories"
+      - "./data/index.json:/scanpix/index.json"
+      - "./data/images:/scanpix/images"
+      - "./ml:/scanpix/ml"
+
   indexer:
     build:
       context: .
@@ -16,4 +21,8 @@ services:
     ports:
       - "5000:5000"
     volumes:
-      - "./data:/worker-app/data"
+      - "./.directories:/worker-app/.directories"
+      - "./data/index.json:/worker-app/index.json"
+      - "./data/images:/worker-app/images"
+      - "./ml:/worker-app/ml"
+

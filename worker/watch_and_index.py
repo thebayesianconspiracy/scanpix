@@ -16,6 +16,7 @@ class Watcher:
 
     # watcher starts monitoring the directory
     def run(self):
+        print("directories => ", self.directories)
         for directory in self.directories:
             self.observer.schedule(self.handler, directory, self.recursive)
         self.observer.start()
@@ -41,15 +42,23 @@ class MyHandler(FileSystemEventHandler):
         file_name = extract_filename(event.src_path)
         if event.event_type == "created" and file_name.endswith(".jpg"):
             print(f"New image file: {file_name} created.....")
-            # indexer = Indexer()
-            # json_res = indexer.index(file_name)
-            # indexer.dump_to_json(json_res)
-            # print(f"Dumping json of {file_name} to index.json....")
+            indexer = Indexer()
+            json_res = indexer.index(file_name, event.src_path)
+            indexer.dump_to_json(json_res)
+            print(f"Dumping json of {file_name} to index.json....")
 
 
 if __name__ == "__main__":
+    import re
     paths  = []
-    with open("../.directories","r") as f:
-        paths = [i.strip() for i in f.readlines()]
+    with open(".directories","r") as f:
+        paths = f.readlines()
+
+    for _ in range(len(paths)):
+        path = paths[_].strip()
+        dir_name = re.search(".*/(.*)",path).group(1)
+        paths[_] = dir_name
+
+    print("paths => ", paths)
     w = Watcher(paths, MyHandler())
     w.run()

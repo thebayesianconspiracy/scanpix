@@ -12,4 +12,4 @@ EXPOSE 5001
 COPY ml/ ml/
 
 # start server
-CMD ["python3", "ml/server.py", "--index-loc", "data/"]
+CMD ["python3", "ml/server.py", "--index-loc", "/scanpix/"]
