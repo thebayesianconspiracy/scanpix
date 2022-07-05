@@ -10,4 +10,4 @@ RUN  pip3 install watchdog requests
 EXPOSE 5000
 
 # start monitoring
-CMD ["python3","watch_and_index.py"]
+CMD ["python3","-u","watch_and_index.py"]

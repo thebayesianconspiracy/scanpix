@@ -10,8 +10,8 @@ services:
     volumes:
       - "./.directories:/scanpix/.directories"
       - "./data/index.json:/scanpix/index.json"
-      - "./data/images:/scanpix/images"
-      - "./ml:/scanpix/ml"
+      - "/Users/adithya.bennur/SideHustles/scanpix/data/images:/scanpix/images"
+      - "/Users/adithya.bennur/SideHustles/scanpix/ml:/scanpix/ml"
 
   indexer:
     build:
@@ -23,6 +23,6 @@ services:
     volumes:
       - "./.directories:/worker-app/.directories"
       - "./data/index.json:/worker-app/index.json"
-      - "./data/images:/worker-app/images"
-      - "./ml:/worker-app/ml"
+      - "/Users/adithya.bennur/SideHustles/scanpix/data/images:/worker-app/images"
+      - "/Users/adithya.bennur/SideHustles/scanpix/ml:/worker-app/ml"
 

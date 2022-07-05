@@ -52,12 +52,14 @@ if __name__ == "__main__":
     import re
     paths  = []
     with open(".directories","r") as f:
-        paths = f.readlines()
+        paths = f.readlines()[1:]
 
     for _ in range(len(paths)):
         path = paths[_].strip()
-        dir_name = re.search(".*/(.*)",path).group(1)
-        paths[_] = dir_name
+        m = re.search(".*/(.*)",path)
+        if(m):
+            dir_name = m.group(1)
+            paths[_] = "/worker-app/" + dir_name
 
     print("paths => ", paths)
     w = Watcher(paths, MyHandler())

@@ -12,8 +12,10 @@ def generate_volume_string(container_root_dir):
     volume_string = "volumes:\n"
     for line in volume_lines:
         line = line.strip("\n")
-        dir_name = re.search(".*/(.*)",line).group(1)
-        volume_string +=  "      - " + "\"" + line + f":/{container_root_dir}/{dir_name}"+ "\"" + "\n"
+        m = re.search(".*/(.*)",line)
+        if(m):
+            dir_name = m.group(1)
+            volume_string +=  "      - " + "\"" + line + f":/{container_root_dir}/{dir_name}"+ "\"" + "\n"
     return volume_string
 
 if __name__ == "__main__":
