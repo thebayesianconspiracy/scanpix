@@ -50,17 +50,7 @@ class MyHandler(FileSystemEventHandler):
 
 if __name__ == "__main__":
     import re
-    paths  = []
-    with open(".directories","r") as f:
-        paths = f.readlines()[1:]
-
-    for _ in range(len(paths)):
-        path = paths[_].strip()
-        m = re.search(".*/(.*)",path)
-        if(m):
-            dir_name = m.group(1)
-            paths[_] = "/worker-app/" + dir_name
-
+    paths  = ["/worker-app/data/images"]
     print("paths => ", paths)
-    w = Watcher(paths, MyHandler())
+    w = Watcher(paths, MyHandler(), True)
     w.run()

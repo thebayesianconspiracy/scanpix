@@ -47,4 +47,4 @@ class Indexer:
         return res
 
     def dump_to_json(self, json_index):
-        append_to_json("/worker-app/index.json", json_index)
+        append_to_json("/worker-app/data/index.json", json_index)

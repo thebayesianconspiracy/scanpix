@@ -30,17 +30,3 @@ app.whenReady().then(() => {
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit()
 })
-
-
-const { dialog, ipcMain } = require('electron')
-
-ipcMain.on('select-dirs', async (event, arg) => {
-  const result = await dialog.showOpenDialog(mainWindow, {
-    properties: ['openDirectory']
-  })
-  console.log('directories selected', result.filePaths)
-  const fs = require('fs')
-  fs.appendFile('../.directories', '\n' + result.filePaths[0], (err) => {
-    if (err) throw err;
-  })
-})

@@ -8,11 +8,7 @@ services:
     ports:
       - "5001:5001"
     volumes:
-      - "./.directories:/scanpix/.directories"
-      - "./data/index.json:/scanpix/index.json"
-      - "/Users/adithya.bennur/SideHustles/scanpix/data/images:/scanpix/images"
-      - "/Users/adithya.bennur/SideHustles/scanpix/ml:/scanpix/ml"
-
+      - "./data:/scanpix/data"
   indexer:
     build:
       context: .
@@ -21,8 +17,4 @@ services:
     ports:
       - "5000:5000"
     volumes:
-      - "./.directories:/worker-app/.directories"
-      - "./data/index.json:/worker-app/index.json"
-      - "/Users/adithya.bennur/SideHustles/scanpix/data/images:/worker-app/images"
-      - "/Users/adithya.bennur/SideHustles/scanpix/ml:/worker-app/ml"
-
+      - "./data:/worker-app/data"

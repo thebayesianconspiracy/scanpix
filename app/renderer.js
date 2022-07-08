@@ -119,11 +119,6 @@ searchBar.addEventListener('keydown', (e) => {
         getEmbedding();
     }
 })
-const uploadBtn = document.getElementById('upload-dir-button').addEventListener('click', () => {
-  window.postMessage({
-    type: 'select-dirs'
-  })
-})
 
 window.onload = function displayPrompts() {
     if (!isElectron()){
