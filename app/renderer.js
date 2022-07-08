@@ -25,7 +25,7 @@ function getQueryURL(){
             return "http://0.0.0.0:8000";
         }
         else {
-            return "https://scanpix.co" ;
+            return "http://0.0.0.0:5001" ;
         }
     }
 }
@@ -129,10 +129,6 @@ searchBar.addEventListener('keydown', (e) => {
 window.onload = function displayPrompts() {
     if (!isElectron()){
         const promptDiv = document.getElementById('prompts');
-        const instruction = document.createElement('p');
-        instruction.innerHTML = "Click and try these prompts: ";
-        instruction.className = "instruction";
-        promptDiv.appendChild(instruction);
         const prompts = [
             "pug",
             "pug eating dinner",
@@ -141,7 +137,7 @@ window.onload = function displayPrompts() {
         ]
         prompts.forEach(function (item, index) {
             var promptEle = document.createElement("a");
-            promptEle.className = "ui label black prompts";
+            promptEle.className = "ui label white prompts";
             promptEle.innerHTML = item;
             promptEle.addEventListener("click", function(){
                 console.log(this.innerHTML);
