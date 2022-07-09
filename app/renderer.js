@@ -101,8 +101,11 @@ function displayResult(data){
 }
 
 function getEmbedding(){
-    const text = document.getElementById('search-bar').value;
-    console.log("Query: ", text)
+    const text = document.getElementById('search-bar').value.trim();
+    if (text === ""){
+        return '';
+    }
+    console.log("Query: ", text);
     url = getQueryURL() + "/search?text="+text;
     fetch(url).then(function(response) {
         return response.json();
@@ -132,8 +135,9 @@ window.onload = function displayPrompts() {
         const prompts = [
             "pug",
             "pug eating dinner",
-            "put with a cone",
+            "pug with a cone",
             "waterfall",
+            "outdoors"
         ]
         prompts.forEach(function (item, index) {
             var promptEle = document.createElement("a");
@@ -145,6 +149,12 @@ window.onload = function displayPrompts() {
                 document.getElementById('search-button').click();
             })
             promptDiv.appendChild(promptEle)
-        })
+        });
+
+        $('#indexer-progress').progress({
+            percent: 100
+          });
+        $('.checkbox')
+          .checkbox('check')
     }
 }
