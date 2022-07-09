@@ -8,7 +8,7 @@ from index_image import *
 ''' watcher class to monitor directories '''
 class Watcher:
 
-    def __init__(self, directories=".", handler=FileSystemEventHandler(), recursive=False):
+    def __init__(self, directories=["."], handler=FileSystemEventHandler(), recursive=False):
         self.observer = Observer()
         self.handler = handler
         self.directories = directories
@@ -17,17 +17,16 @@ class Watcher:
     # watcher starts monitoring the directory
     def run(self):
         print("directories => ", self.directories)
-        for directory in self.directories:
-            self.observer.schedule(self.handler, directory, self.recursive)
+        self.observer.schedule(self.handler, self.directories[0], self.recursive)
         self.observer.start()
-        print("Observers started...")
-
+        print("\nWatcher Running in {}/\n".format(self.directories[0]))
         try:
             while True:
                 time.sleep(1)
         except:
             self.observer.stop()
         self.observer.join()
+        print("\nWatcher Terminated\n")
 
 '''function to extract filename from path'''
 def extract_filename(path):
@@ -40,17 +39,23 @@ class MyHandler(FileSystemEventHandler):
 
     def on_created(self, event):
         file_name = extract_filename(event.src_path)
-        if event.event_type == "created" and file_name.endswith(".jpg"):
-            print(f"New image file: {file_name} created.....")
-            indexer = Indexer()
-            json_res = indexer.index(file_name, event.src_path)
-            indexer.dump_to_json(json_res)
-            print(f"Dumping json of {file_name} to index.json....")
+        image_file = file_name.endswith(".jpg") or file_name.endswith(".png")
+        indexer = Indexer()
+        print(f"{file_name} created event.....")
+        json_res = indexer.index(file_name, event.src_path)
+        indexer.dump_to_json(json_res)
+        print(f"Dumping json of {file_name} to index.json....")
 
+    def on_deleted(self, event):
+        file_name = extract_filename(event.src_path)
+        image_file = file_name.endswith(".jpg") or file_name.endswith(".png")
+        indexer = Indexer()
+        print(f"{file_name} delete event.....")
+        indexer.remove_from_json(file_name)
+        print(f"deleted {file_name} index from index.json")
 
 if __name__ == "__main__":
     import re
     paths  = ["/worker-app/data/images"]
-    print("paths => ", paths)
     w = Watcher(paths, MyHandler(), True)
     w.run()
