@@ -8,10 +8,12 @@ services:
     ports:
       - "5001:5001"
     volumes:
-      - ./data/db:/scanpix/data
+      - ./data/db:/scanpix/data/db
   reverse-proxy:
     image: nginx:latest
     container_name: docker_nginx
+    profiles:
+      - demo
     ports:
       - 8000:8000
       - 80:80

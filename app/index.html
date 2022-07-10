@@ -13,34 +13,71 @@
 
     <link href="https://cdn.jsdelivr.net/npm/nanogallery2@3/dist/css/nanogallery2.min.css" rel="stylesheet" type="text/css">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/nanogallery2@3/dist/jquery.nanogallery2.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flexboxgrid@6.3.1/dist/flexboxgrid.min.css">
+    <link rel="icon" type="image/x-icon" href="./assets/logo.ico">
 
 
     <link href="./style.css" rel="stylesheet"> 
     <title>scanpix</title>
   </head>
   <body>
-    <div id="main-content">
-      <h1 id="jumbo-title">scanpix</h1>
-      <div class="ui action input">
-        <input type="text" id="search-bar" placeholder="A sleeping pug">
-        <button id="search-button" class="ui icon button black"><i class="search icon"></i></button>
+    <div id="main-content" class="row center-xs">
+      <div class="col-xs-12 col-md-9 center-xs">
+        <div class="row middle-xs" id="top-bar">
+          <img src="./assets/logo.png" id="logo">
+          <h1 id="jumbo-title">scanpix</h1>
+        </div>
+        <div class="row center-xs middle-xs">
+          <div class="ui action input col-md-4 col-xs-10">
+            <input type="text" id="search-bar" placeholder="A sleeping pug">
+            <button id="search-button" class="ui icon button"><i class="search icon"></i></button>
+          </div>
+        </div>
+        <div class="col-xs-12 col-md-8 col-md-offset-2 center-xs">
+          <div class="ui black label" id="results-meta" style="margin: 20px; display: none; font-size: 1.5rem;">
+            <i class="images icon"></i>
+            <span id="results-meta-text"></span>
+          </div>
+          <div id="img-list"></div>  
+        </div>
       </div>
-      
-      <div class="ui black label" id="results-meta" style="margin: 20px; display: none">
-        <i class="images icon"></i>
-        <span id="results-meta-text"></span>
+      <div class="row col-md-3 center-xs top-xs" id="sidebar">
+        <div class="col-md-10 side-block">
+          <p class="instruction">About</p>
+          <p class="normal-font">Scanpix is a tool for semantic media search. You can search for objects, scenes or even emotions in pictures using simple text! Google Photos does a great job at this, but lacks critical features and it sucks that you have to share all your pictures with them 👀. </p>
+          <p class="normal-font">Checkout how to run scanpix on your own images!</p>
+          <div class="grid ui centered" id="footer">
+            <a class="ui white label" href="https://github.com/thebayesianconspiracy/scanpix" target="_blank">
+              <i class="github icon"></i>
+              thebayesianconspiracy/scanpix
+            </a>
+            <a class="ui white label" href="https://github.com/thebayesianconspiracy/scanpix/issues/24" target="_blank">
+              <i class="cloud icon"></i>
+              Hosted version pliss!
+            </a>
+          </div>
+        </div>
+        <div class="col-md-10 side-block">
+          <p class="instruction">Status</p>
+          <p class="normal-font"><i class="inverted eye icon"></i> <code>{{ loc }}</code></p>
+          
+          <div class="ui inverted toggle checkbox" style="margin-bottom: 2rem;">
+            <input type="checkbox" name="status">
+            <label id="indexer-toggle" class="normal-font">Indexer status</label>
+          </div>
+
+          <div class="ui inverted indicating progress standard normal-font" id="indexer-progress">
+            <div class="bar"> <div class="progress"></div></div>
+            <div class="label normal-font">{{ imgs }} / {{ imgs }} images indexed</div>
+          </div>
+        </div>
+        <div class="col-md-10  side-block">
+          <p class="instruction">Try these Prompts</p>
+          <div id="prompts" class="row middle-xs"></div>
+        </div>
       </div>
-      <!-- <div id="img-list" class="ui link medium cards"></div>   -->
-      <div id="prompts" class="ui grid center aligned row">
-      </div>
-      <div id="img-list"></div>  
     </div>
-    <div class="grid ui centered" id="footer">
-      <a class="ui black label" href="https://github.com/thebayesianconspiracy/scanpix" target="_blank">
-        <i class="github icon"></i>
-        thebayesianconspiracy/scanpix
-      </a>
-    </div>
+    
     <script src="./renderer.js"></script>
   </body>
 </html>

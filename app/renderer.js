@@ -25,7 +25,7 @@ function getQueryURL(){
             return "http://0.0.0.0:8000";
         }
         else {
-            return "https://scanpix.co" ;
+            return "http://0.0.0.0:5001" ;
         }
     }
 }
@@ -101,8 +101,11 @@ function displayResult(data){
 }
 
 function getEmbedding(){
-    const text = document.getElementById('search-bar').value;
-    console.log("Query: ", text)
+    const text = document.getElementById('search-bar').value.trim();
+    if (text === ""){
+        return '';
+    }
+    console.log("Query: ", text);
     url = getQueryURL() + "/search?text="+text;
     fetch(url).then(function(response) {
         return response.json();
@@ -129,19 +132,16 @@ searchBar.addEventListener('keydown', (e) => {
 window.onload = function displayPrompts() {
     if (!isElectron()){
         const promptDiv = document.getElementById('prompts');
-        const instruction = document.createElement('p');
-        instruction.innerHTML = "Click and try these prompts: ";
-        instruction.className = "instruction";
-        promptDiv.appendChild(instruction);
         const prompts = [
             "pug",
             "pug eating dinner",
-            "put with a cone",
+            "pug with a cone",
             "waterfall",
+            "outdoors"
         ]
         prompts.forEach(function (item, index) {
             var promptEle = document.createElement("a");
-            promptEle.className = "ui label black prompts";
+            promptEle.className = "ui label white prompts";
             promptEle.innerHTML = item;
             promptEle.addEventListener("click", function(){
                 console.log(this.innerHTML);
@@ -149,6 +149,12 @@ window.onload = function displayPrompts() {
                 document.getElementById('search-button').click();
             })
             promptDiv.appendChild(promptEle)
-        })
+        });
+
+        $('#indexer-progress').progress({
+            percent: 100
+          });
+        $('.checkbox')
+          .checkbox('check')
     }
 }

@@ -6,6 +6,7 @@ from flask import Flask, jsonify, request, render_template, send_from_directory
 from media_processor import MediaProcessor
 from tqdm import tqdm
 
+
 INDEX_LOC = None
 IMG_LOC = None
 RESULT_LIMIT = 25
@@ -18,7 +19,9 @@ app = Flask(__name__, template_folder=TEMPLATE_DIR, static_folder=STATIC_FOLDER,
 
 @app.route("/")
 def hello_world():
-    return render_template('index.html')
+    with open(f'{INDEX_LOC}/index.json', 'r') as fob:
+        img_index = json.load(fob)
+    return render_template('index.html', loc=INDEX_LOC, imgs=len(img_index))
 
 
 @app.route("/image/<path:name>")
@@ -58,7 +61,7 @@ if __name__ == '__main__':
     parser.add_argument('--index-loc', type=str, help='location of the index file', default="../data/")
     args = parser.parse_args()
 
-    INDEX_LOC = os.path.abspath(args.index_loc)
+    INDEX_LOC = os.path.abspath(os.path.join(args.index_loc, "db"))
     IMG_LOC = os.path.abspath(os.path.join(args.index_loc, "images"))
 
     media_processor = MediaProcessor()
