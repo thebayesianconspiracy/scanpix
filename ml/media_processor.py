@@ -6,8 +6,8 @@ import imagehash
 
 class ClipModel:
     def __init__(self):
-        self.model = CLIPModel.from_pretrained("openai/clip-vit-large-patch14")
-        self.processor = CLIPProcessor.from_pretrained("openai/clip-vit-large-patch14")
+        self.model = CLIPModel.from_pretrained("models/clip-vit-large-patch14")
+        self.processor = CLIPProcessor.from_pretrained("models/clip-vit-large-patch14")
 
     def get_embedding(self, input, type):
         if type == "image":

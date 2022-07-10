@@ -8,7 +8,10 @@ services:
     ports:
       - "5001:5001"
     volumes:
-      - ./data/db:/scanpix/data/db
+      - ./data:/scanpix/data
+      - ./models:/scanpix/models
+    # environment:
+    # - MODE=${MODE}
   reverse-proxy:
     image: nginx:latest
     container_name: docker_nginx

@@ -11,8 +11,8 @@ INDEX_LOC = None
 IMG_LOC = None
 RESULT_LIMIT = 25
 SCORE_THRESHOLD = 0.20
-TEMPLATE_DIR = os.path.abspath('../app')
-STATIC_FOLDER = os.path.abspath('../app')
+TEMPLATE_DIR = os.path.abspath('app')
+STATIC_FOLDER = os.path.abspath('app')
 
 app = Flask(__name__, template_folder=TEMPLATE_DIR, static_folder=STATIC_FOLDER, static_url_path='')
 
@@ -63,6 +63,6 @@ if __name__ == '__main__':
 
     INDEX_LOC = os.path.abspath(os.path.join(args.index_loc, "db"))
     IMG_LOC = os.path.abspath(os.path.join(args.index_loc, "images"))
-
+    print("IMG_LOC", IMG_LOC)
     media_processor = MediaProcessor()
     app.run(host="0.0.0.0", port=5001, debug=True)

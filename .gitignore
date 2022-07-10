@@ -1,10 +1,8 @@
-data/images2
-data/images3
-data/images4
-data/index2.json
+data/*
+!data/db
+!data/images
 */__pycache__/
 */.ipynb_checkpoints/
-*/node_modules
-*/out
 .DS_Store
-package-lock.json
+models/*
+!models/README.md
