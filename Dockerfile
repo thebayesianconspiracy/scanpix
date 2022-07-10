@@ -10,7 +10,6 @@ EXPOSE 5001
 
 # copy directories
 COPY ml/ ml/
-COPY data/ data/
 COPY app/ app/
 
 # start server

@@ -61,7 +61,7 @@ if __name__ == '__main__':
     parser.add_argument('--index-loc', type=str, help='location of the index file', default="../data/")
     args = parser.parse_args()
 
-    INDEX_LOC = os.path.abspath(args.index_loc)
+    INDEX_LOC = os.path.abspath(os.path.join(args.index_loc, "db"))
     IMG_LOC = os.path.abspath(os.path.join(args.index_loc, "images"))
 
     media_processor = MediaProcessor()

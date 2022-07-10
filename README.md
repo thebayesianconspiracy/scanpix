@@ -43,37 +43,28 @@ This project consists of two almost parallel tracks: `research` and `software`. 
 ---
 # Usage (ToDo: Add better instructions!)
 
+## Running using Docker Compose (Recommended)
+Starting the ml server in docker consists of 2 steps:
+* Build the image -> ``docker-compose build``
+* start the container -> ``docker-compose up -d``
+
+Once the server has started you can go to `0.0.0.0:5001` to see the frontend or open the jupyter notebook to interact with the server. It takes a little while the first time as it download all necessary models.
+
+
+## Local Installation
 ```
-# Installation
-# 1. Backend
 # This repo needs pytorch to be installed
 # Hopefully you're using pipenv / virtualenv / anaconda
 # so that you don't mess up your package versions
 pip install -r requirements.txt
 
-# 2. Frontend app (you can skip this if you're just running the nbs and server)
-# cd app && yarn install
--------------------------------------------------------------------------
-
 # Running
 # 1. Running the ML server
 cd ml && python server.py --index-loc ../data/
-# This should start up the ml server
-# It takes a while the first time you run it
 
 # 2. Running the notebook
 cd nbs && jupyter notebook
-
-# 3. Running the app
-cd app && yarn start
 ```
-
-## Running using Docker Compose
-Starting the ml server in docker consists of 2 steps:
-* Build the image -> ``docker-compose build``
-* start the container -> ``docker-compose up -d``
-
-Once the server has started you can use the electron frontend or the jupyter notebook to interact with the server.
 
 ---
 ## Questions to think about
