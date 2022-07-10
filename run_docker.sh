@@ -2,6 +2,8 @@
 cd models
 if [ ! -d "clip-vit-large-patch14" ] ; then
     git clone https://huggingface.co/openai/clip-vit-large-patch14
+    git lfs install
+    git lfs pull
 fi
 cd ..
 
