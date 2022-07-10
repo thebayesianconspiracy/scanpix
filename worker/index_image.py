@@ -48,7 +48,7 @@ class Indexer:
         return res
 
     def dump_to_json(self, json_index):
-        append_to_json("/worker-app/data/index.json", json_index)
+        append_to_json("/worker-app/data/db/index.json", json_index)
 
     def remove_from_json(self, file_name):
         with open("/worker-app/data/index.json", "r") as f:
@@ -56,5 +56,5 @@ class Indexer:
         index_list = json.loads(raw_data)
 
         index_list = list(filter(lambda x: x["file_name"]!=file_name, index_list))
-        with open("/worker-app/data/index.json", "w", encoding = "utf-8") as f:
+        with open("/worker-app/data/db/index.json", "w", encoding = "utf-8") as f:
             json.dump(index_list, f, indent = 4)
