@@ -1,12 +1,9 @@
-data/images2
-data/images3
-data/images4
-data/index2.json
+data/*
+!data/db
+!data/images
 */__pycache__/
 */.ipynb_checkpoints/
-*/node_modules
-*/out
 .DS_Store
+models/*
+!models/README.md
 .idea
-package-lock.json
-.directories
