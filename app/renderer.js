@@ -1,55 +1,16 @@
-function isElectron(){
-    if (typeof navigator === 'object' && typeof navigator.userAgent === 'string' && navigator.userAgent.indexOf('Electron') >= 0) {
-        return true;
-    }
-    return false;
-}
-
 function getImageLocation(img_path){
-    if (isElectron()){
-        return "file://" + img_path;
-    } 
-    else {
-        var temp = img_path.split("/");
-        return "/image/" + temp[temp.length - 1];
-    }
+    var temp = img_path.split("/");
+    return "/image/" + temp[temp.length - 1];
 }
 
-function getQueryURL(){
-    if (isElectron()){
-        return "http://0.0.0.0:5001";
-    } 
-    else {
-        if (window.location.href.includes('localhost')) {
-            console.log("isDev");
-            return "http://0.0.0.0:8000";
-        }
-        else {
-            return "http://0.0.0.0:5001" ;
-        }
+function getQueryURL(){ 
+    if (window.location.href.includes('localhost')) {
+        console.log("isDev");
+        return "http://0.0.0.0:8000";
     }
-}
-
-function createCard(img, text){
-    var cardDiv = document.createElement("div");
-    var imageDiv = document.createElement("div");
-    var image = document.createElement("img");
-    var contentDiv = document.createElement("div");
-    var content = document.createElement("span");
-    
-    cardDiv.className = 'card';
-    imageDiv.className = 'image';
-    imageDiv.style.height = "200px";
-    image.setAttribute("data-src", img);
-    image.style.objectFit = 'cover';
-    contentDiv.className = 'extra content';
-    content.innerHTML = text;
-
-    contentDiv.appendChild(content);
-    imageDiv.appendChild(image);
-    cardDiv.appendChild(imageDiv);
-    cardDiv.appendChild(contentDiv);
-    return cardDiv;
+    else {
+        return "http://0.0.0.0:5001" ;
+    }
 }
 
 function displayImages(imageScores){
@@ -61,10 +22,7 @@ function displayImages(imageScores){
     imageScores.forEach(function (item, index) {
         const itemLoc = getImageLocation(item[1]);
         var itemText = item[0];
-        if (isElectron()){
-            itemText = itemText + ": " + String(Math.round(item[2] * 100.0) / 100.0);
-        }
-        // imgList.appendChild(createCard(itemLoc, itemText))
+        // itemText = itemText + ": " + String(Math.round(item[2] * 100.0) / 100.0);
         console.log(itemLoc, itemText);
         items.push({src: itemLoc, srct: itemLoc, title: itemText})
     });
@@ -129,32 +87,33 @@ searchBar.addEventListener('keydown', (e) => {
     }
 })
 
-window.onload = function displayPrompts() {
-    if (!isElectron()){
-        const promptDiv = document.getElementById('prompts');
-        const prompts = [
-            "pug",
-            "pug eating dinner",
-            "pug with a cone",
-            "waterfall",
-            "outdoors"
-        ]
-        prompts.forEach(function (item, index) {
-            var promptEle = document.createElement("a");
-            promptEle.className = "ui label white prompts";
-            promptEle.innerHTML = item;
-            promptEle.addEventListener("click", function(){
-                console.log(this.innerHTML);
-                document.getElementById('search-bar').value = this.innerHTML;
-                document.getElementById('search-button').click();
-            })
-            promptDiv.appendChild(promptEle)
-        });
+function displayPrompts() {
+    const promptDiv = document.getElementById('prompts');
+    const prompts = [
+        "pug",
+        "pug eating dinner",
+        "pug with a cone",
+        "waterfall",
+        "outdoors"
+    ]
+    prompts.forEach(function (item, index) {
+        var promptEle = document.createElement("a");
+        promptEle.className = "ui label white prompts";
+        promptEle.innerHTML = item;
+        promptEle.addEventListener("click", function(){
+            console.log(this.innerHTML);
+            document.getElementById('search-bar').value = this.innerHTML;
+            document.getElementById('search-button').click();
+        })
+        promptDiv.appendChild(promptEle)
+    });
+}
 
-        $('#indexer-progress').progress({
-            percent: 100
-          });
-        $('.checkbox')
-          .checkbox('check')
-    }
+window.onload = function initStuff(){
+    displayPrompts();
+    $('#indexer-progress').progress({
+        percent: 100
+    });
+    $('.checkbox')
+        .checkbox('check')
 }

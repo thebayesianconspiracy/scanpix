@@ -10,8 +10,8 @@ services:
     volumes:
       - ./data:/scanpix/data
       - ./models:/scanpix/models
-    # environment:
-    # - MODE=${MODE}
+    environment:
+    - MODE=${MODE}
   reverse-proxy:
     image: nginx:latest
     container_name: docker_nginx
