@@ -17,6 +17,8 @@ services:
       context: .
       dockerfile: worker/Dockerfile
     image: indexer-service
+    profiles:
+      - demo
     ports:
       - "5000:5000"
     volumes:
