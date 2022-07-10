@@ -51,7 +51,7 @@ class Indexer:
         append_to_json("/worker-app/data/db/index.json", json_index)
 
     def remove_from_json(self, file_name):
-        with open("/worker-app/data/index.json", "r") as f:
+        with open("/worker-app/data/db/index.json", "r") as f:
             raw_data = f.read()
         index_list = json.loads(raw_data)
 
