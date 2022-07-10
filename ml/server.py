@@ -2,10 +2,11 @@ import os
 import json
 import argparse
 import numpy as np
+from tqdm import tqdm
+import sqlite3
+from datetime import datetime
 from flask import Flask, jsonify, request, render_template, send_from_directory
 from media_processor import MediaProcessor
-from tqdm import tqdm
-
 
 INDEX_LOC = None
 IMG_LOC = None
@@ -52,8 +53,14 @@ def search():
         score = np.dot(embedding, index['clip_embedding'])
         if score > SCORE_THRESHOLD:
             result.append((index['file_name'], index['file_location'], score))
-    result = sorted(result, key=lambda x: x[2], reverse=True)
-    return jsonify({'results': result[:RESULT_LIMIT], 'total_images': len(img_index)})
+    result = sorted(result, key=lambda x: x[2], reverse=True)[:RESULT_LIMIT]
+
+    with sqlite3.connect(os.path.join(INDEX_LOC, 'scanpix.db')) as connection:
+        cur = connection.cursor()
+        cur.execute("insert into queries values (?, ?, ?)", (datetime.now(), text, len(result)))
+        connection.commit()
+
+    return jsonify({'results': result, 'total_images': len(img_index)})
 
 
 if __name__ == '__main__':
@@ -63,6 +70,11 @@ if __name__ == '__main__':
 
     INDEX_LOC = os.path.abspath(os.path.join(args.index_loc, "db"))
     IMG_LOC = os.path.abspath(os.path.join(args.index_loc, "images"))
-    print("IMG_LOC", IMG_LOC)
+
+    with sqlite3.connect(os.path.join(INDEX_LOC, 'scanpix.db')) as connection:
+        cur = connection.cursor()
+        cur.execute("CREATE TABLE IF NOT EXISTS queries (ts timestamp, query text, results int)")
+        connection.commit()
+
     media_processor = MediaProcessor()
     app.run(host="0.0.0.0", port=5001, debug=True)
