@@ -1,15 +1,26 @@
 version: '3'
 services:
-  scanpix-server:
+  scanpix:
     build:
       context: .
       dockerfile: Dockerfile
-    image: scanpix-server:1.0
+    image: scanpix-server
     ports:
       - "5001:5001"
     volumes:
       - ./data:/scanpix/data
       - ./models:/scanpix/models
+    environment:
+    - MODE=${MODE}
+  indexer:
+    build:
+      context: .
+      dockerfile: worker/Dockerfile
+    image: indexer-service
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./data:/worker-app/data
     environment:
     - MODE=${MODE}
   reverse-proxy:

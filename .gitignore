@@ -6,3 +6,4 @@ data/*
 .DS_Store
 models/*
 !models/README.md
+.idea

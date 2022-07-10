@@ -13,4 +13,4 @@ COPY ml/ ml/
 COPY app/ app/
 
 # start server
-CMD ["python3", "ml/server.py", "--index-loc", "data"]
+CMD ["python3", "ml/server.py", "--index-loc", "/scanpix/data"]
