@@ -14,6 +14,7 @@ RESULT_LIMIT = 25
 SCORE_THRESHOLD = 0.20
 TEMPLATE_DIR = os.path.abspath('app')
 STATIC_FOLDER = os.path.abspath('app')
+MODE = os.getenv('MODE')
 
 app = Flask(__name__, template_folder=TEMPLATE_DIR, static_folder=STATIC_FOLDER, static_url_path='')
 
@@ -22,7 +23,7 @@ app = Flask(__name__, template_folder=TEMPLATE_DIR, static_folder=STATIC_FOLDER,
 def hello_world():
     with open(f'{INDEX_LOC}/index.json', 'r') as fob:
         img_index = json.load(fob)
-    return render_template('index.html', loc=INDEX_LOC, imgs=len(img_index))
+    return render_template('index.html', loc=INDEX_LOC, imgs=len(img_index), mode=MODE)
 
 
 @app.route("/image/<path:name>")

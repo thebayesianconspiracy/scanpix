@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: 'unsafe-inline' https://cdn.jsdelivr.net http://0.0.0.0:8000 http://0.0.0.0:5001 http://165.232.139.243:8000 https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' https://cdn.jsdelivr.net; font-src 'self' data: https://fonts.gstatic.com https://cdn.jsdelivr.net;">
+        <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: 'unsafe-inline' https://cdn.jsdelivr.net http://0.0.0.0:8000 http://0.0.0.0:5001 http://165.232.139.243:8000 https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' https://cdn.jsdelivr.net https://www.googletagmanager.com; font-src 'self' data: https://fonts.gstatic.com https://cdn.jsdelivr.net;"> -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;900&display=swap" rel="stylesheet">
@@ -19,6 +19,10 @@
 
     <link href="./style.css" rel="stylesheet"> 
     <title>scanpix</title>
+    {% if mode == "demo" %}
+      {% include "ga.html" %}
+    {% endif %}
+
   </head>
   <body>
     <div id="main-content" class="row center-xs">
