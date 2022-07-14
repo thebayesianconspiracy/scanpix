@@ -44,11 +44,12 @@ class Indexer:
         res = requests.get(url=BASEURL, params={'url': img_path }).json()
         res['file_name'] = img_name
         res['file_location'] = img_path
-        print("got transformed image from server....")
+        print("got transformed image from server!")
         return res
 
     def dump_to_json(self, json_index):
         append_to_json("/worker-app/data/db/index.json", json_index)
+        print("Dumped to index.json!")
 
     def remove_from_json(self, file_name):
         with open("/worker-app/data/db/index.json", "r") as f:
