@@ -1,6 +1,7 @@
 import requests
 import json
 import os
+from singleton_decorator import singleton
 
 
 BASEURL = "http://scanpix:5001/process_image"
@@ -35,7 +36,7 @@ def append_to_json(filepath, data):
         f.seek(index)
         f.write(new_ending)
 
-
+@singleton
 class Indexer:
 
     def index(self, img_name, img_path):
@@ -59,3 +60,4 @@ class Indexer:
         index_list = list(filter(lambda x: x["file_name"]!=file_name, index_list))
         with open("/worker-app/data/db/index.json", "w", encoding = "utf-8") as f:
             json.dump(index_list, f, indent = 4)
+        print(f"removed {file_name} from json")
