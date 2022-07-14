@@ -5,7 +5,7 @@ WORKDIR worker-app/
 
 # Copying directories and installing dependencies
 COPY worker/ .
-RUN  pip3 install watchdog requests
+RUN  pip3 install watchdog requests singleton-decorator
 
 EXPOSE 5000
 
