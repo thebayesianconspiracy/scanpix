@@ -6,7 +6,7 @@ services:
       dockerfile: Dockerfile
     image: scanpix-server
     ports:
-      - "5001:5001"
+      - 5001:5001
     volumes:
       - ./data:/scanpix/data
       - ./models:/scanpix/models
@@ -21,9 +21,10 @@ services:
       - demo
       - index
     ports:
-      - "5000:5000"
+      - 7070:7070
     volumes:
       - ./data:/worker-app/data
+      - ./.indexer_progress_bar:/worker-app/.indexer_progress_bar
     environment:
     - MODE=${MODE}
   reverse-proxy:

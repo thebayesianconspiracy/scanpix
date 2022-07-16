@@ -5,9 +5,10 @@ WORKDIR worker-app/
 
 # Copying directories and installing dependencies
 COPY worker/ .
-RUN  pip3 install watchdog requests singleton-decorator
+RUN  pip3 install watchdog requests singleton-decorator websockets
 
-EXPOSE 5000
+EXPOSE 7070
 
 # start monitoring
-CMD ["python3","-u","watch_and_index.py"]
+RUN chmod +x start_worker.sh
+CMD ["./start_worker.sh"]
