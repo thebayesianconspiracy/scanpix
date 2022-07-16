@@ -7,3 +7,4 @@ data/*
 models/*
 !models/README.md
 .idea
+web_socket_client.py
