@@ -109,10 +109,17 @@ function displayPrompts() {
     });
 }
 
+const indexerWebSocket = new WebSocket("ws://0.0.0.0:7070");
+indexerWebSocket.onmessage = function (event) {
+    $('#indexer-progress').progress({
+        percent: event.data
+    });
+}
+
 window.onload = function initStuff(){
     displayPrompts();
     $('#indexer-progress').progress({
-        percent: 100
+        percent: 0
     });
     $('.checkbox')
         .checkbox('check')

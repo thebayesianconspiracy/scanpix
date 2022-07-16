@@ -1,10 +1,35 @@
 import time
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
+from singleton_decorator import singleton
 import re
 import os
+import asyncio
+import websockets
+
 
 from index_image import *
+
+''' indexer metdata class'''
+@singleton
+class Indexer_Metadata:
+    def __init__(self):
+        self.images_indexed = 0
+        self.images_total = 0
+    def add_images_indexed_count(self, count):
+        self.images_indexed += count
+    def add_images_total_count(self, count):
+        self.images_total += count
+
+'''initializing Indexer releated classes'''
+indexer_metadata = Indexer_Metadata()
+indexer = Indexer()
+
+def write_to_progress_bar():
+    with open("/worker-app/.indexer_progress_bar","w") as f:
+        percentage = int(indexer_metadata.images_indexed / indexer_metadata.images_total * 100)
+        print(indexer_metadata.images_indexed, indexer_metadata.images_total, percentage)
+        f.write(str(percentage))
 
 def check_if_image(file_name):
     pat = ".*\.(.*)"
@@ -17,8 +42,6 @@ def check_if_image(file_name):
 ''' function to index all exisiting files not included in index.json initially'''
 def index_unwatched_files():
     print("indexing unwatched files....")
-    indexer = Indexer()
-
     def check_if_image_in_index(index_list, file_name):
         for index in index_list:
             if(index["file_name"] == file_name):
@@ -29,10 +52,18 @@ def index_unwatched_files():
         raw_data = f.read()
     index_list = json.loads(raw_data)
 
+    indexer_metadata.add_images_total_count(len(index_list))
+    indexer_metadata.add_images_indexed_count(len(index_list))
+    write_to_progress_bar()
+
     for file_name in os.listdir("/worker-app/data/images"):
         if(check_if_image(file_name) and (not check_if_image_in_index(index_list, file_name))):
             json_res = indexer.index(file_name,f"/worker-app/data/images/{file_name}")
             indexer.dump_to_json(json_res)
+            indexer_metadata.add_images_indexed_total(1)
+            write_to_progress_bar()
+
+
 
 ''' watcher class to monitor directories '''
 class Watcher:
@@ -68,20 +99,25 @@ class MyHandler(FileSystemEventHandler):
 
     def on_created(self, event):
         file_name = extract_filename(event.src_path)
-        indexer = Indexer()
         print(f"{file_name} created event!")
+        indexer_metadata.add_images_total_count(1)
+        write_to_progress_bar()
         if(check_if_image(file_name)):
             json_res = indexer.index(file_name, event.src_path)
             indexer.dump_to_json(json_res)
+            indexer_metadata.add_images_indexed_count(1)
+            write_to_progress_bar()
         else:
             raise Exception("Invalid type of file, cannot be indexed!")
 
     def on_deleted(self, event):
         file_name = extract_filename(event.src_path)
-        indexer = Indexer()
         print(f"{file_name} delete event!")
         if(check_if_image(file_name)):
             indexer.remove_from_json(file_name)
+            indexer_metadata.add_images_total_count(-1)
+            indexer_metadata.add_images_indexed_count(-1)
+            write_to_progress_bar()
         else:
             raise Exception("Invalid type of file, cannot be deleted from index.json!")
 
