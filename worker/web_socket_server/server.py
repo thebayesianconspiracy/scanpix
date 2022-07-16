@@ -4,7 +4,7 @@ import time
 
 def get_from_file():
     with open("/worker-app/.indexer_progress_bar", "r") as f:
-        return int(f.read())
+        return str(f.read())
 
 
 async def send_progress_info(websocket, path):

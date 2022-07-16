@@ -110,10 +110,14 @@ function displayPrompts() {
 }
 
 const indexerWebSocket = new WebSocket("ws://0.0.0.0:7070");
+const indexerStatusLabel = document.getElementById("indexer-status-label")
 indexerWebSocket.onmessage = function (event) {
+    let status_list = event.data.split('_')
+    let percentage = String(Math.floor(Number(status_list[0])/Number(status_list[1])*100))
     $('#indexer-progress').progress({
-        percent: event.data
+        percent: percentage
     });
+    indexerStatusLabel.innerHTML = String(status_list[0]) + "/" + String(status_list[1]) + " images indexed"
 }
 
 window.onload = function initStuff(){

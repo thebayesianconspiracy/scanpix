@@ -27,9 +27,7 @@ indexer = Indexer()
 
 def write_to_progress_bar():
     with open("/worker-app/.indexer_progress_bar","w") as f:
-        percentage = int(indexer_metadata.images_indexed / indexer_metadata.images_total * 100)
-        print(indexer_metadata.images_indexed, indexer_metadata.images_total, percentage)
-        f.write(str(percentage))
+        f.write(str(indexer_metadata.images_indexed) + '_' + str(indexer_metadata.images_total))
 
 def check_if_image(file_name):
     pat = ".*\.(.*)"
@@ -52,15 +50,16 @@ def index_unwatched_files():
         raw_data = f.read()
     index_list = json.loads(raw_data)
 
-    indexer_metadata.add_images_total_count(len(index_list))
+    directory_iterator = os.listdir("/worker-app/data/images")
+    indexer_metadata.add_images_total_count(len(directory_iterator))
     indexer_metadata.add_images_indexed_count(len(index_list))
     write_to_progress_bar()
 
-    for file_name in os.listdir("/worker-app/data/images"):
+    for file_name in directory_iterator:
         if(check_if_image(file_name) and (not check_if_image_in_index(index_list, file_name))):
             json_res = indexer.index(file_name,f"/worker-app/data/images/{file_name}")
             indexer.dump_to_json(json_res)
-            indexer_metadata.add_images_indexed_total(1)
+            indexer_metadata.add_images_indexed_count(1)
             write_to_progress_bar()
 
 
