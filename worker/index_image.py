@@ -8,7 +8,7 @@ BASEURL = "http://scanpix:5001/process_image"
 
 def append_to_json(filepath, data):
 
-    # if file is empty dump to eempty file and return
+    # if file is empty dump to empty file and return
     if(os.stat(filepath).st_size == 0):
         with open(filepath, "w", encoding='utf-8') as f:
             json.dump([data], f)
