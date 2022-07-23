@@ -1,5 +1,5 @@
 import unittest
-from worker.watch_and_index import extract_filename,check_if_image
+from utils.util import extract_filename,check_if_image
 
 class TestWatcher(unittest.TestCase):
 
