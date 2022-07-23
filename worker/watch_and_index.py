@@ -4,7 +4,7 @@ from watchdog.events import FileSystemEventHandler
 import re
 import os
 
-from index_image import *
+from worker.index_image import *
 
 def check_if_image(file_name):
     pat = ".*\.(.*)"
