@@ -46,7 +46,7 @@ class Watcher:
 
 
 '''Custom Handler class to handle events retured by the watcher'''
-class MyHandler(FileSystemEventHandler):
+class WatchHandler(FileSystemEventHandler):
 
     def on_created(self, event):
         file_name = extract_filename(event.src_path)
@@ -70,5 +70,5 @@ class MyHandler(FileSystemEventHandler):
 if __name__ == "__main__":
     index_unwatched_files()
     paths  = ["/worker-app/data/images"]
-    w = Watcher(paths, MyHandler(), True)
+    w = Watcher(paths, WatchHandler(), True)
     w.run()
