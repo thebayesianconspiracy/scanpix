@@ -19,6 +19,7 @@ services:
     image: indexer-service
     profiles:
       - demo
+      - index
     ports:
       - "5000:5000"
     volumes:

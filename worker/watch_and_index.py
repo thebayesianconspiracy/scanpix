@@ -2,8 +2,23 @@ import time
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 import re
+import os
 
 from index_image import *
+from utils.util import *
+
+''' function to index all exisiting files not included in index.json initially'''
+def index_unwatched_files():
+    print("indexing unwatched files....")
+    indexer = Indexer()
+    with open("/worker-app/data/db/index.json") as f:
+        raw_data = f.read()
+    index_list = json.loads(raw_data)
+
+    for file_name in os.listdir("/worker-app/data/images"):
+        if(check_if_image(file_name) and (not check_if_image_in_index(index_list, file_name))):
+            json_res = indexer.index(file_name,f"/worker-app/data/images/{file_name}")
+            indexer.dump_to_json(json_res)
 
 ''' watcher class to monitor directories '''
 class Watcher:
@@ -28,34 +43,32 @@ class Watcher:
         self.observer.join()
         print("\nWatcher Terminated\n")
 
-'''function to extract filename from path'''
-def extract_filename(path):
-    m = re.search(".*/(.*)", path)
-    return m.group(1)
 
 
 '''Custom Handler class to handle events retured by the watcher'''
-class MyHandler(FileSystemEventHandler):
+class WatchHandler(FileSystemEventHandler):
 
     def on_created(self, event):
         file_name = extract_filename(event.src_path)
-        image_file = file_name.endswith(".jpg") or file_name.endswith(".png")
         indexer = Indexer()
-        print(f"{file_name} created event.....")
-        json_res = indexer.index(file_name, event.src_path)
-        indexer.dump_to_json(json_res)
-        print(f"Dumping json of {file_name} to index.json....")
+        print(f"{file_name} created event!")
+        if(check_if_image(file_name)):
+            json_res = indexer.index(file_name, event.src_path)
+            indexer.dump_to_json(json_res)
+        else:
+            raise Exception("Invalid type of file, cannot be indexed!")
 
     def on_deleted(self, event):
         file_name = extract_filename(event.src_path)
-        image_file = file_name.endswith(".jpg") or file_name.endswith(".png")
         indexer = Indexer()
-        print(f"{file_name} delete event.....")
-        indexer.remove_from_json(file_name)
-        print(f"deleted {file_name} index from index.json")
+        print(f"{file_name} delete event!")
+        if(check_if_image(file_name)):
+            indexer.remove_from_json(file_name)
+        else:
+            raise Exception("Invalid type of file, cannot be deleted from index.json!")
 
 if __name__ == "__main__":
-    import re
+    index_unwatched_files()
     paths  = ["/worker-app/data/images"]
-    w = Watcher(paths, MyHandler(), True)
+    w = Watcher(paths, WatchHandler(), True)
     w.run()
