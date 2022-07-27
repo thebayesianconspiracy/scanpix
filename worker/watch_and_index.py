@@ -6,8 +6,7 @@ import re
 import os
 import asyncio
 import websockets
-
-
+from utils.util import *
 from index_image import *
 
 ''' indexer metdata class'''
@@ -29,23 +28,12 @@ def write_to_progress_bar():
     with open("/worker-app/.indexer_progress_bar","w") as f:
         f.write(str(indexer_metadata.images_indexed) + '_' + str(indexer_metadata.images_total))
 
-def check_if_image(file_name):
-    pat = ".*\.(.*)"
-    m = re.search(pat, file_name)
-    extensions = set(["jpg","jpeg","png"])
-    if(m.group(1) in extensions):
-        return True
-    return False
+
 
 ''' function to index all exisiting files not included in index.json initially'''
 def index_unwatched_files():
     print("indexing unwatched files....")
-    def check_if_image_in_index(index_list, file_name):
-        for index in index_list:
-            if(index["file_name"] == file_name):
-                return True
-        return False
-
+    indexer = Indexer()
     with open("/worker-app/data/db/index.json") as f:
         raw_data = f.read()
     index_list = json.loads(raw_data)
@@ -87,14 +75,10 @@ class Watcher:
         self.observer.join()
         print("\nWatcher Terminated\n")
 
-'''function to extract filename from path'''
-def extract_filename(path):
-    m = re.search(".*/(.*)", path)
-    return m.group(1)
 
 
 '''Custom Handler class to handle events retured by the watcher'''
-class MyHandler(FileSystemEventHandler):
+class WatchHandler(FileSystemEventHandler):
 
     def on_created(self, event):
         file_name = extract_filename(event.src_path)
@@ -123,5 +107,5 @@ class MyHandler(FileSystemEventHandler):
 if __name__ == "__main__":
     index_unwatched_files()
     paths  = ["/worker-app/data/images"]
-    w = Watcher(paths, MyHandler(), True)
+    w = Watcher(paths, WatchHandler(), True)
     w.run()
