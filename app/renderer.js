@@ -4,12 +4,11 @@ function getImageLocation(img_path){
 }
 
 function getQueryURL(){ 
-    if (window.location.href.includes('localhost')) {
-        console.log("isDev");
-        return "http://0.0.0.0:8000";
+    if (window.location.href.includes('0.0.0.0')) {
+        return "http://0.0.0.0:5001";
     }
     else {
-        return "http://0.0.0.0:5001" ;
+        return "https://scanpix.co" ;
     }
 }
 
