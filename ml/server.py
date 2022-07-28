@@ -14,7 +14,7 @@ RESULT_LIMIT = 25
 SCORE_THRESHOLD = 0.20
 TEMPLATE_DIR = os.path.abspath('app')
 STATIC_FOLDER = os.path.abspath('app')
-MODE = os.getenv('MODE')
+MODE = os.getenv('MODE', "local")
 
 app = Flask(__name__, template_folder=TEMPLATE_DIR, static_folder=STATIC_FOLDER, static_url_path='')
 

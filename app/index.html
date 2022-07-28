@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-        <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: 'unsafe-inline' https://cdn.jsdelivr.net http://0.0.0.0:8000 http://0.0.0.0:5001 http://165.232.139.243:8000 https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' https://cdn.jsdelivr.net https://www.googletagmanager.com; font-src 'self' data: https://fonts.gstatic.com https://cdn.jsdelivr.net;"> -->
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: 'unsafe-inline' https://cdn.jsdelivr.net http://0.0.0.0:8000 http://0.0.0.0:5001 http://165.232.139.243:8000 https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' https://cdn.jsdelivr.net https://www.googletagmanager.com; font-src 'self' data: https://fonts.gstatic.com https://cdn.jsdelivr.net;"> -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;900&display=swap" rel="stylesheet">
@@ -45,8 +45,8 @@
           <div id="img-list"></div>  
         </div>
       </div>
-      <div class="row col-md-3 center-xs top-xs" id="sidebar">
-        <div class="col-md-10 side-block">
+      <div class="row col-md-3 col-xs-12 center-xs top-xs" id="sidebar">
+        <div class="col-md-11 side-block">
           <p class="instruction">About</p>
           <p class="normal-font">Scanpix is a tool for semantic media search. You can search for objects, scenes or even emotions in pictures using simple text! Google Photos does a great job at this, but lacks critical features and it sucks that you have to share all your pictures with them 👀. </p>
           <p class="normal-font">Checkout how to run scanpix on your own images!</p>
@@ -61,7 +61,7 @@
             </a>
           </div>
         </div>
-        <div class="col-md-10 side-block">
+        <div class="col-md-11 side-block">
           <p class="instruction">Status</p>
           <p class="normal-font"><i class="inverted eye icon"></i> <code>{{ loc }}</code></p>
           
@@ -75,7 +75,7 @@
             <div class="label normal-font">{{ imgs }} / {{ imgs }} images indexed</div>
           </div>
         </div>
-        <div class="col-md-10  side-block">
+        <div class="col-md-11  side-block">
           <p class="instruction">Try these Prompts</p>
           <div id="prompts" class="row middle-xs"></div>
         </div>

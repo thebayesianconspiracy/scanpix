@@ -1,11 +1,5 @@
 html {
-    font-size: 100%;
-}
-
-@media (min-width: 64em) {
-    html {
-        font-size: 50% !important;
-    }
+    font-size: 16px;
 }
  
 
@@ -21,12 +15,11 @@ body{
 }
 
 #search-bar{
-    font-size: 2rem;
+    font-size: 1rem;
 }
 
 #search-button{
-    /* padding: 1.5em; */
-    font-size: 2rem;
+    font-size: 1rem;
     color: #fff;
     background: #212529;
 
@@ -34,13 +27,13 @@ body{
 
 #jumbo-title{
     font-weight: 900;
-    font-size: 4rem;
+    font-size: 2rem;
     margin: 0px !important;
 }
 
 #logo{
-    height: 6rem !important;
-    margin-right: 1rem;
+    height: 3rem !important;
+    margin-right: 0.5rem;
 }
 
 img{
@@ -74,21 +67,22 @@ img{
 }
 
 .label{
-    font-size: 1.5rem!important;
+    font-size: 0.7rem!important;
+    margin: 0.5rem 0.1rem 0.5rem 0.1rem !important;
 }
 
 #top-bar{
-    padding: 1.5rem;
+    padding: 1rem;
     border-bottom: #eee 1px solid;
     margin-bottom: 2rem;
 }
 
 .instruction{
-    font-size: 2rem !important;
+    font-size: 1.5rem !important;
     color: #eee;
-    margin-top: 3rem !important;
+    margin-top: 1rem !important;
     text-transform: uppercase;
-    letter-spacing: 1rem;
+    letter-spacing: 0.5rem;
 }
 
 .top-xs{
@@ -96,12 +90,12 @@ img{
 }
 
 .side-block{
-    padding: 2rem;
+    padding: 1rem;
     border-bottom: 1px solid #333;
 }
 
 .normal-font{
-    font-size: 1.8rem !important;
+    font-size: 1rem !important;
     color: #fff !important;
 }
 
@@ -112,18 +106,18 @@ code{
 }
 
 #indexer-toggle{
-    padding-left: 6rem;
+    padding-left: 4rem;
 }
 
 #indexer-toggle::before{
-    width: 5rem;
-    height: 3rem;
+    width: 3.5rem;
+    height: 1.5rem;
 }
 
 
 #indexer-toggle::after{
-    width: 3rem;
-    height: 3rem;
+    width: 1.5rem;
+    height: 1.5rem;
 }
 
 .prompts{

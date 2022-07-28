@@ -7,12 +7,14 @@ if [ ! -d "clip-vit-large-patch14" ] ; then
 fi
 cd ..
 
-# Build docker
-docker compose build
+# Build docker (does not build by default)
+if [ $1 = "build" ]; then
+    docker compose build
+fi
 
 # Run docker
 DOCKER_COMMAND="docker compose"
-if [ $1 = "demo" ]; then
+if [ $2 = "demo" ]; then
     export MODE="demo"
     DOCKER_COMMAND="${DOCKER_COMMAND} --profile demo"
 else
