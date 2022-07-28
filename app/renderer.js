@@ -50,7 +50,7 @@ function displayImages(imageScores){
 }
 
 
-function displayResult(text, data){
+function displayResult(data){
     const results = document.getElementById("results-meta");
     results.style.display = 'block';
 
@@ -59,10 +59,8 @@ function displayResult(text, data){
     $("#results-meta-text").html(innerHTML);
     $(".feedback-btn").click((e)=>{
         const feedback = $(e.target).attr("data-feedback");
-        const requestBody = {"text": text, "resultsno": data.results.length, "feedback": feedback};
-
+        const requestBody = {"row_id": data.row_id, "feedback": feedback};
         const url = getQueryURL() + "/feedback";
-
         fetch(url, {
             method: 'POST',
             headers: {
@@ -83,9 +81,6 @@ function displayResult(text, data){
 
 function getEmbedding(){
     const text = document.getElementById('search-bar').value.trim();
-    if (text === ""){
-        return '';
-    }
     console.log("Query: ", text);
     url = getQueryURL() + "/search?text="+text;
     fetch(url).then(function(response) {
@@ -93,7 +88,7 @@ function getEmbedding(){
     }).then(function(data) {
         console.log("Number of relevant results: ", data.results.length);
         console.log("Total images: ", data.total_images);
-        displayResult(text, data);
+        displayResult(data);
     }).catch(function(e) {
         console.log(e);
     });

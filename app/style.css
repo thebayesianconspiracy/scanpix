@@ -89,7 +89,7 @@ img{
 }
 
 #top-bar{
-    padding: 1rem;
+    padding: 1rem 2rem 1rem 2rem;
     border-bottom: #eee 1px solid;
     margin-bottom: 2rem;
 }
@@ -147,6 +147,6 @@ code{
 }
 
 
-.feedback{
-    margin: 5px;
+.feedback, #thanks{
+    margin: 0.5rem;
 }

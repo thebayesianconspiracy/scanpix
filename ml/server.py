@@ -58,15 +58,19 @@ def search():
 
     with sqlite3.connect(os.path.join(INDEX_LOC, 'scanpix.db')) as connection:
         cur = connection.cursor()
-        cur.execute("insert into queries values (?, ?, ?)", (datetime.now(), text, len(result)))
+        cur.execute("insert into queries values (?, ?, ?, ?)", (datetime.now(), text, len(result), 0))
         connection.commit()
 
-    return jsonify({'results': result, 'total_images': len(img_index)})
+    return jsonify({'results': result, 'total_images': len(img_index), 'row_id': cur.lastrowid})
 
 
 @app.route("/feedback", methods=['POST'])
 def feedback():
-    print(request.json)
+    feedback = 1 if request.json['feedback'] == 'positive' else -1 if request.json['feedback'] == 'negative' else 0
+    with sqlite3.connect(os.path.join(INDEX_LOC, 'scanpix.db')) as connection:
+        cur = connection.cursor()
+        cur.execute(f"update queries set feedback={feedback} where rowid={request.json['row_id']}")
+        connection.commit()
     return jsonify({"message": "success"})
 
 
@@ -80,7 +84,7 @@ if __name__ == '__main__':
 
     with sqlite3.connect(os.path.join(INDEX_LOC, 'scanpix.db')) as connection:
         cur = connection.cursor()
-        cur.execute("CREATE TABLE IF NOT EXISTS queries (ts timestamp, query text, results int)")
+        cur.execute("CREATE TABLE IF NOT EXISTS queries (ts timestamp, query text, results int, feedback int)")
         connection.commit()
 
     media_processor = MediaProcessor()
