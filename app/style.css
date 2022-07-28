@@ -10,8 +10,6 @@ body{
 #main-content{
     text-align: center;
     min-height: 100vh;
-    /* min-height: 90%; */
-    /* position: relative; */
 }
 
 #search-bar{
@@ -60,11 +58,30 @@ img{
     text-shadow: none !important;
 }
 
-
-#sidebar{
-    background: #212529;
-    text-align: left;
+@media (max-width: 64em) {
+    #sidebar{
+        background: #212529;
+        text-align: left;
+        position: absolute;
+        top: 5rem;
+        z-index: 999;
+        display: none;
+    }
+    #ham{
+        display: block;
+    }
 }
+@media (min-width: 64em) {
+    #sidebar{
+        background: #212529;
+        text-align: left;
+    }
+    #ham{
+        display: none;
+    }
+}
+ 
+
 
 .label{
     font-size: 0.7rem!important;
@@ -123,3 +140,10 @@ code{
 .prompts{
     margin-bottom: 0.5rem !important;
 }
+
+.hamburger{
+    margin: 0px !important;
+    padding: 0px !important;
+    font-size: 1.5rem !important;
+}
+

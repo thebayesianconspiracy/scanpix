@@ -114,6 +114,9 @@ window.onload = function initStuff(){
     $('#indexer-progress').progress({
         percent: 100
     });
-    $('.checkbox')
-        .checkbox('check')
-}
+    $('.checkbox').checkbox('check');
+    $('#ham').click(()=>{
+        $('#sidebar').toggle();
+    });
+    
+} 
