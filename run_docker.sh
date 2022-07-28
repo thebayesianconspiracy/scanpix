@@ -7,18 +7,27 @@ if [ ! -d "clip-vit-large-patch14" ] ; then
 fi
 cd ..
 
-# Build docker
-docker compose build
+# Build docker (does not build by default)
+if [ $BUILD = 1 ]; then
+    echo "---BUILDING IMAGE---"
+    docker compose build
+fi
 
 # Run docker
 DOCKER_COMMAND="docker compose"
-if [ $1 = "demo" ]; then
+if [ $DEMO = 1 ]; then
+    echo "---SETTING DEMO MODE---"
     export MODE="demo"
     DOCKER_COMMAND="${DOCKER_COMMAND} --profile demo"
 else
     export MODE="local"
 fi
 
-DOCKER_COMMAND="${DOCKER_COMMAND} up"
+if [ $INDEX = 1 ]; then
+    echo "---STARTING INDEXER---"
+    DOCKER_COMMAND="${DOCKER_COMMAND} --profile index"
+fi
+
+DOCKER_COMMAND="${DOCKER_COMMAND} up -d"
 echo $DOCKER_COMMAND
 $DOCKER_COMMAND

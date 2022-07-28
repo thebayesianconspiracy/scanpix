@@ -14,7 +14,7 @@ RESULT_LIMIT = 25
 SCORE_THRESHOLD = 0.20
 TEMPLATE_DIR = os.path.abspath('app')
 STATIC_FOLDER = os.path.abspath('app')
-MODE = os.getenv('MODE')
+MODE = os.getenv('MODE', "local")
 
 app = Flask(__name__, template_folder=TEMPLATE_DIR, static_folder=STATIC_FOLDER, static_url_path='')
 
@@ -48,20 +48,37 @@ def search():
     with open(f'{INDEX_LOC}/index.json', 'r') as fob:
         img_index = json.load(fob)
     text = request.args.get('text', type=str)
-    embedding = media_processor.process_text(text)['clip_embedding']
-    result = []
-    for index in tqdm(img_index):
-        score = np.dot(embedding, index['clip_embedding'])
-        if score > SCORE_THRESHOLD:
-            result.append((index['file_name'], index['file_location'], score))
-    result = sorted(result, key=lambda x: x[2], reverse=True)[:RESULT_LIMIT]
+    if text == "":
+        img_index.reverse()
+        result = [(index['file_name'], index['file_location'], i) for i, index in enumerate(img_index)][:RESULT_LIMIT]
+        row_id = -1
+    else:
+        embedding = media_processor.process_text(text)['clip_embedding']
+        result = []
+        for index in tqdm(img_index):
+            score = np.dot(embedding, index['clip_embedding'])
+            if score > SCORE_THRESHOLD:
+                result.append((index['file_name'], index['file_location'], score))
+        result = sorted(result, key=lambda x: x[2], reverse=True)[:RESULT_LIMIT]
 
-    with sqlite3.connect(os.path.join(INDEX_LOC, 'scanpix.db')) as connection:
-        cur = connection.cursor()
-        cur.execute("insert into queries values (?, ?, ?)", (datetime.now(), text, len(result)))
-        connection.commit()
+        with sqlite3.connect(os.path.join(INDEX_LOC, 'scanpix.db')) as connection:
+            cur = connection.cursor()
+            cur.execute("insert into queries values (?, ?, ?, ?)", (datetime.now(), text, len(result), 0))
+            connection.commit()
+            row_id = cur.lastrowid
 
-    return jsonify({'results': result, 'total_images': len(img_index)})
+    return jsonify({'results': result, 'total_images': len(img_index), 'row_id': row_id})
+
+
+@app.route("/feedback", methods=['POST'])
+def feedback():
+    feedback = 1 if request.json['feedback'] == 'positive' else -1 if request.json['feedback'] == 'negative' else 0
+    if request.json['row_id'] >= 0:
+        with sqlite3.connect(os.path.join(INDEX_LOC, 'scanpix.db')) as connection:
+            cur = connection.cursor()
+            cur.execute(f"update queries set feedback={feedback} where rowid={request.json['row_id']}")
+            connection.commit()
+    return jsonify({"message": "success"})
 
 
 if __name__ == '__main__':
@@ -74,7 +91,7 @@ if __name__ == '__main__':
 
     with sqlite3.connect(os.path.join(INDEX_LOC, 'scanpix.db')) as connection:
         cur = connection.cursor()
-        cur.execute("CREATE TABLE IF NOT EXISTS queries (ts timestamp, query text, results int)")
+        cur.execute("CREATE TABLE IF NOT EXISTS queries (ts timestamp, query text, results int, feedback int)")
         connection.commit()
 
     media_processor = MediaProcessor()

@@ -4,12 +4,11 @@ function getImageLocation(img_path){
 }
 
 function getQueryURL(){ 
-    if (window.location.href.includes('localhost')) {
-        console.log("isDev");
-        return "http://0.0.0.0:8000";
+    if (window.location.href.includes('0.0.0.0')) {
+        return "http://0.0.0.0:5001";
     }
     else {
-        return "http://0.0.0.0:5001" ;
+        return "https://scanpix.co" ;
     }
 }
 
@@ -52,17 +51,38 @@ function displayImages(imageScores){
 
 function displayResult(data){
     const results = document.getElementById("results-meta");
-    const resultsText = document.getElementById("results-meta-text");
     results.style.display = 'block';
-    resultsText.innerHTML = "Relevant Results: " + data.results.length + " / " + data.total_images +" images";
+
+    $("#results-meta-text").html("");
+    let innerHTML = "Relevant Results: " + data.results.length + " / " + data.total_images +" images<br>";
+    if(data.row_id >= 0){
+        innerHTML += "<div class='feedback row middle-xs center-xs'><div class='ui inverted button icon green feedback-btn' data-feedback='positive'><i class='green thumbs up icon' style='pointer-events: none'></i></div><div class='ui inverted button icon red feedback-btn' data-feedback='negative'><i class='red thumbs down icon' style='pointer-events: none'></i></div></div><p id='thanks' style='display:none'>Thanks for the feedback!</p>";
+    }
+    $("#results-meta-text").html(innerHTML);
+    $(".feedback-btn").click((e)=>{
+        const feedback = $(e.target).attr("data-feedback");
+        const requestBody = {"row_id": data.row_id, "feedback": feedback};
+        const url = getQueryURL() + "/feedback";
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestBody)
+        }).then(function(response) {
+            return response.json();
+        }).then(function(data) {
+            $("#thanks").show();
+            $(".feedback").remove();
+        }).catch(function(e) {
+            console.log(e);
+        });
+    })
     displayImages(data.results);
 }
 
 function getEmbedding(){
     const text = document.getElementById('search-bar').value.trim();
-    if (text === ""){
-        return '';
-    }
     console.log("Query: ", text);
     url = getQueryURL() + "/search?text="+text;
     fetch(url).then(function(response) {
@@ -125,6 +145,9 @@ window.onload = function initStuff(){
     $('#indexer-progress').progress({
         percent: 0
     });
-    $('.checkbox')
-        .checkbox('check')
-}
+    $('.checkbox').checkbox('check');
+    $('#ham').click(()=>{
+        $('#sidebar').toggle();
+    });
+    getEmbedding();
+} 
