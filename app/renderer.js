@@ -55,7 +55,10 @@ function displayResult(data){
     results.style.display = 'block';
 
     $("#results-meta-text").html("");
-    const innerHTML = "Relevant Results: " + data.results.length + " / " + data.total_images +" images<br><div class='feedback row middle-xs center-xs'> <div class='ui inverted button icon green feedback-btn' data-feedback='positive'><i class='green thumbs up icon' style='pointer-events: none'></i></div><div class='ui inverted button icon red feedback-btn' data-feedback='negative'><i class='red thumbs down icon' style='pointer-events: none'></i></div></div><p id='thanks' style='display:none'>Thanks for the feedback!</p>";
+    let innerHTML = "Relevant Results: " + data.results.length + " / " + data.total_images +" images<br>";
+    if(data.row_id >= 0){
+        innerHTML += "<div class='feedback row middle-xs center-xs'><div class='ui inverted button icon green feedback-btn' data-feedback='positive'><i class='green thumbs up icon' style='pointer-events: none'></i></div><div class='ui inverted button icon red feedback-btn' data-feedback='negative'><i class='red thumbs down icon' style='pointer-events: none'></i></div></div><p id='thanks' style='display:none'>Thanks for the feedback!</p>";
+    }
     $("#results-meta-text").html(innerHTML);
     $(".feedback-btn").click((e)=>{
         const feedback = $(e.target).attr("data-feedback");
@@ -135,5 +138,6 @@ window.onload = function initStuff(){
     $('.checkbox').checkbox('check');
     $('#ham').click(()=>{
         $('#sidebar').toggle();
-    });    
+    });
+    getEmbedding();
 } 
