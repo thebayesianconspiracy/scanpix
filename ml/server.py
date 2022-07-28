@@ -64,6 +64,12 @@ def search():
     return jsonify({'results': result, 'total_images': len(img_index)})
 
 
+@app.route("/feedback", methods=['POST'])
+def feedback():
+    print(request.json)
+    return jsonify({"message": "success"})
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--index-loc', type=str, help='location of the index file', default="../data/")

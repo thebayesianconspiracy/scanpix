@@ -50,11 +50,34 @@ function displayImages(imageScores){
 }
 
 
-function displayResult(data){
+function displayResult(text, data){
     const results = document.getElementById("results-meta");
-    const resultsText = document.getElementById("results-meta-text");
     results.style.display = 'block';
-    resultsText.innerHTML = "Relevant Results: " + data.results.length + " / " + data.total_images +" images";
+
+    $("#results-meta-text").html("");
+    const innerHTML = "Relevant Results: " + data.results.length + " / " + data.total_images +" images<br><div class='feedback row middle-xs center-xs'> <div class='ui inverted button icon green feedback-btn' data-feedback='positive'><i class='green thumbs up icon' style='pointer-events: none'></i></div><div class='ui inverted button icon red feedback-btn' data-feedback='negative'><i class='red thumbs down icon' style='pointer-events: none'></i></div></div><p id='thanks' style='display:none'>Thanks for the feedback!</p>";
+    $("#results-meta-text").html(innerHTML);
+    $(".feedback-btn").click((e)=>{
+        const feedback = $(e.target).attr("data-feedback");
+        const requestBody = {"text": text, "resultsno": data.results.length, "feedback": feedback};
+
+        const url = getQueryURL() + "/feedback";
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestBody)
+        }).then(function(response) {
+            return response.json();
+        }).then(function(data) {
+            $("#thanks").show();
+            $(".feedback").remove();
+        }).catch(function(e) {
+            console.log(e);
+        });
+    })
     displayImages(data.results);
 }
 
@@ -70,7 +93,7 @@ function getEmbedding(){
     }).then(function(data) {
         console.log("Number of relevant results: ", data.results.length);
         console.log("Total images: ", data.total_images);
-        displayResult(data);
+        displayResult(text, data);
     }).catch(function(e) {
         console.log(e);
     });
@@ -117,6 +140,5 @@ window.onload = function initStuff(){
     $('.checkbox').checkbox('check');
     $('#ham').click(()=>{
         $('#sidebar').toggle();
-    });
-    
+    });    
 } 
