@@ -3,14 +3,6 @@ function getImageLocation(img_path){
     return "/image/" + temp[temp.length - 1];
 }
 
-function getQueryURL(){ 
-    if (window.location.href.includes('0.0.0.0')) {
-        return "http://0.0.0.0:5001";
-    }
-    else {
-        return "https://scanpix.co" ;
-    }
-}
 
 function displayImages(imageScores){
     console.log(imageScores);
@@ -62,7 +54,7 @@ function displayResult(data){
     $(".feedback-btn").click((e)=>{
         const feedback = $(e.target).attr("data-feedback");
         const requestBody = {"row_id": data.row_id, "feedback": feedback};
-        const url = getQueryURL() + "/feedback";
+        const url = "/feedback";
         fetch(url, {
             method: 'POST',
             headers: {
@@ -84,7 +76,7 @@ function displayResult(data){
 function getEmbedding(){
     const text = document.getElementById('search-bar').value.trim();
     console.log("Query: ", text);
-    url = getQueryURL() + "/search?text="+text;
+    url = "/search?text="+text;
     fetch(url).then(function(response) {
         return response.json();
     }).then(function(data) {
