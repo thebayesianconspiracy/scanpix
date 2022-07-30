@@ -4,8 +4,9 @@ from watchdog.events import FileSystemEventHandler
 from singleton_decorator import singleton
 from utils.util import *
 from index_image import *
+import socketio
 
-''' indexer metdata class'''
+''' indexer metadata class'''
 
 
 @singleton
@@ -27,8 +28,8 @@ indexer = Indexer()
 
 
 def write_to_progress_bar():
-    with open("/worker-app/.indexer_progress_bar", "w") as f:
-        f.write(str(indexer_metadata.images_indexed) + '_' + str(indexer_metadata.images_total))
+    payload = str(indexer_metadata.images_indexed) + '_' + str(indexer_metadata.images_total)
+    send_payload(payload)
 
 
 ''' function to index all exisiting files not included in index.json initially'''
@@ -110,7 +111,28 @@ class WatchHandler(FileSystemEventHandler):
             raise Exception("Invalid type of file, cannot be deleted from index.json!")
 
 
+'''SocketIO Client related functions'''
+socket_io = socketio.Client()
+
+
+@socket_io.event
+def connect():
+    print('connection established')
+
+
+@socket_io.event
+def send_payload(data):
+    print(f"emitting data => {data} to server...")
+    socket_io.emit('indexer_progress_event', data)
+
+
+@socket_io.event
+def disconnect():
+    print('disconnected from server')
+
+
 if __name__ == "__main__":
+    socket_io.connect("http://scanpix:5001")
     index_unwatched_files()
     paths = ["/worker-app/data/images"]
     w = Watcher(paths, WatchHandler(), True)

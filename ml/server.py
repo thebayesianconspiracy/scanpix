@@ -6,6 +6,7 @@ from tqdm import tqdm
 import sqlite3
 from datetime import datetime
 from flask import Flask, jsonify, request, render_template, send_from_directory
+from flask_socketio import SocketIO, send, emit
 from media_processor import MediaProcessor
 
 INDEX_LOC = None
@@ -17,13 +18,12 @@ STATIC_FOLDER = os.path.abspath('app')
 MODE = os.getenv('MODE', "local")
 
 app = Flask(__name__, template_folder=TEMPLATE_DIR, static_folder=STATIC_FOLDER, static_url_path='')
+socket = SocketIO(app)
 
 
 @app.route("/")
 def hello_world():
-    with open(f'{INDEX_LOC}/index.json', 'r') as fob:
-        img_index = json.load(fob)
-    return render_template('index.html', loc=INDEX_LOC, imgs=len(img_index), mode=MODE)
+    return render_template('index.html', loc=INDEX_LOC, imgs_indexed="0", imgs_total="0", mode=MODE)
 
 
 @app.route("/image/<path:name>")
@@ -81,6 +81,32 @@ def feedback():
     return jsonify({"message": "success"})
 
 
+class IndexerProgressMap:
+    def __init__(self):
+        self.progress = "0_0"
+
+    def set(self, data):
+        self.progress = data
+
+    def get(self):
+        return self.progress
+
+
+indexerProgressMap = IndexerProgressMap()
+
+
+@socket.on("indexer_progress_event")
+def handle_indexer_progress_event(data):
+    app.logger.info(f"progress => {data}")
+    indexerProgressMap.set(data)
+
+
+# endpoint to which the websocket payload received is dumped
+@app.route("/indexer-progress")
+def indexer_progress():
+    return indexerProgressMap.get()
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--index-loc', type=str, help='location of the index file', default="../data/")
@@ -95,4 +121,4 @@ if __name__ == '__main__':
         connection.commit()
 
     media_processor = MediaProcessor()
-    app.run(host="0.0.0.0", port=5001, debug=True)
+    socket.run(app, host="0.0.0.0", port=5001, debug=True)
