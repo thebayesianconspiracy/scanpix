@@ -36,12 +36,6 @@
             <i class="hamburger icon"></i>
           </div>
         </div>
-        <div class="row center-xs middle-xs">
-          <div class="ui action input col-md-4 col-xs-10">
-            <input type="text" id="search-bar" placeholder="A sleeping pug">
-            <button id="search-button" class="ui icon button"><i class="search icon"></i></button>
-          </div>
-        </div>
         <div class="col-xs-12 col-md-8 col-md-offset-2 center-xs" id="img-section">
           <div id="spinny">
             <div class="ui active inverted dimmer">
@@ -51,9 +45,17 @@
             <p></p>
             <p></p>
           </div>
-          <div class="ui black label" id="results-meta" style="margin: 20px; display: none; font-size: 1.5rem;">
-            <i class="images icon"></i>
-            <span id="results-meta-text"></span>
+          <div class="ui segment" id="input-block">
+            <div class="row center-xs middle-xs">
+              <div class="ui action input col-md-4 col-xs-10">
+                <input type="text" id="search-bar" placeholder="A sleeping pug">
+                <button id="search-button" class="ui icon button basic"><i class="search icon"></i></button>
+              </div>
+            </div>
+            <div class="ui black label" id="results-meta" style="margin: 20px; display: none; font-size: 1.5rem;">
+              <i class="images icon"></i>
+              <span id="results-meta-text"></span>
+            </div>
           </div>
           <div id="img-list"></div>  
         </div>
@@ -79,7 +81,11 @@
           <p class="normal-font"><i class="inverted eye icon"></i> <code>{{ loc }}</code></p>
           
           <div class="ui inverted toggle checkbox" style="margin-bottom: 2rem;">
-            <input type="checkbox" name="status">
+            {% if mode == "demo" %}
+              <input type="checkbox" name="status"  disabled="disabled">
+            {% else %}
+              <input type="checkbox" name="status">
+            {% endif %}
             <label id="indexer-toggle" class="normal-font">Indexer status</label>
           </div>
 
@@ -97,7 +103,7 @@
           <p class="normal-font">Test images sourced from <a href="https://cocodataset.org/#download">COCO Val2017</a>, 
             <a href="https://yingqianwang.github.io/Flickr1024/">Flickr1024</a>, and a beautiful pug named Kiwi.
           </p>
-          <p class="normal-font">Made with <i class="heart icon red"></i> by The Bayesian Conspiracy</p>
+          <p class="normal-font" style="text-align: center;">Made with <i class="heart icon red"></i> by The Bayesian Conspiracy</p>
         </div>
       </div>
     </div>

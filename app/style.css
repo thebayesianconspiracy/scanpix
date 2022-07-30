@@ -19,7 +19,8 @@ body{
 #search-button{
     font-size: 1rem;
     color: #fff;
-    background: #212529;
+    background: #1b1c1d;
+    border: 2px solid white;
 
 }
 
@@ -45,6 +46,7 @@ img{
 
 #img-list{
     padding: 20px;
+    display: block;
 }
 
 .nGY2Gallery{
@@ -60,7 +62,7 @@ img{
 
 @media (max-width: 64em) {
     #sidebar{
-        background: #212529;
+        background: #1b1c1d;
         text-align: left;
         position: absolute;
         top: 5rem;
@@ -73,7 +75,7 @@ img{
 }
 @media (min-width: 64em) {
     #sidebar{
-        background: #212529;
+        background: #1b1c1d;
         text-align: left;
     }
     #ham{
@@ -142,13 +144,17 @@ code{
 }
 
 .ui.button{
-    padding: 0.5rem !important;
+    /* padding: 0.5rem !important; */
     font-size: 1rem !important;
 }
 
 
 .feedback, #thanks{
     margin: 0.5rem;
+}
+
+.feedback-btn{
+    padding: 0.75rem 2rem 0.75rem 2rem!important;
 }
 
 
@@ -167,4 +173,9 @@ code{
 
 #loader{
     top: 50vh !important;
+}
+
+#input-block{
+    background: #1b1c1d;
+    padding-bottom: 0px;
 }

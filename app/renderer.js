@@ -47,7 +47,7 @@ function displayResult(data){
     $("#results-meta-text").html("");
     let innerHTML = "Relevant Results: " + data.result_count + " / " + data.total_images +" images<br>";
     if(data.row_id >= 0){
-        innerHTML += "<div class='feedback row middle-xs center-xs'><div class='ui inverted button icon green feedback-btn' data-feedback='positive'><i class='green thumbs up icon' style='pointer-events: none'></i></div><div class='ui inverted button icon red feedback-btn' data-feedback='negative'><i class='red thumbs down icon' style='pointer-events: none'></i></div></div><p id='thanks' style='display:none'>Thanks for the feedback!</p>";
+        innerHTML += "<div class='feedback row middle-xs center-xs'><div class='ui button icon green feedback-btn' data-feedback='positive'><i class='thumbs up icon' style='pointer-events: none'></i></div><div class='ui button icon red feedback-btn' data-feedback='negative'><i class='thumbs down icon' style='pointer-events: none'></i></div></div><p id='thanks' style='display:none'>Thanks for the feedback!</p>";
     }
     $("#results-meta-text").html(innerHTML);
     $(".feedback-btn").click((e)=>{
@@ -127,7 +127,10 @@ window.onload = function initStuff(){
     });
     $('.checkbox').checkbox('check');
     $('#ham').click(()=>{
+        $("#img-list").toggle();
+        $("#img-list").nanogallery2('refresh');
         $('#sidebar').toggle();
+        
     });
     getEmbedding();
 } 
