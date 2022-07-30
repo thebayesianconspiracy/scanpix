@@ -73,6 +73,7 @@ function displayResult(data){
 }
 
 function getEmbedding(){
+    $("#spinny").show();
     const text = document.getElementById('search-bar').value.trim();
     console.log("Query: ", text);
     url = "/search?text="+text;
@@ -82,6 +83,8 @@ function getEmbedding(){
         console.log("Number of relevant results: ", data.result_count);
         console.log("Total images: ", data.total_images);
         displayResult(data);
+        $("#spinny").hide();
+
     }).catch(function(e) {
         console.log(e);
     });
