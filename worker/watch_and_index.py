@@ -60,7 +60,9 @@ def index_unwatched_files():
 
 class Watcher:
 
-    def __init__(self, directories=["."], handler=FileSystemEventHandler(), recursive=False):
+    def __init__(self, directories=None, handler=FileSystemEventHandler(), recursive=False):
+        if directories is None:
+            directories = ["."]
         self.observer = Observer()
         self.handler = handler
         self.directories = directories
@@ -91,7 +93,7 @@ class WatchHandler(FileSystemEventHandler):
         print(f"{file_name} created event!")
         indexer_metadata.add_images_total_count(1)
         write_to_progress_bar()
-        if (check_if_image(file_name)):
+        if check_if_image(file_name):
             json_res = indexer.index(file_name, event.src_path)
             indexer.dump_to_json(json_res)
             indexer_metadata.add_images_indexed_count(1)
@@ -102,7 +104,7 @@ class WatchHandler(FileSystemEventHandler):
     def on_deleted(self, event):
         file_name = extract_filename(event.src_path)
         print(f"{file_name} delete event!")
-        if (check_if_image(file_name)):
+        if check_if_image(file_name):
             indexer.remove_from_json(file_name)
             indexer_metadata.add_images_total_count(-1)
             indexer_metadata.add_images_indexed_count(-1)
