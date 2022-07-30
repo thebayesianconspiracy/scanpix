@@ -1,6 +1,6 @@
 version: '3'
 services:
-  scanpix:
+  scanpix-server:
     build:
       context: .
       dockerfile: Dockerfile
@@ -12,11 +12,11 @@ services:
       - ./models:/scanpix/models
     environment:
     - MODE=${MODE}
-  indexer:
+  scanpix-indexer:
     build:
       context: .
       dockerfile: worker/Dockerfile
-    image: indexer-service
+    image: scanpix-indexer
     profiles:
       - demo
       - index
@@ -28,7 +28,7 @@ services:
     - MODE=${MODE}
   reverse-proxy:
     image: nginx:latest
-    container_name: docker_nginx
+    container_name: reverse-proxy
     profiles:
       - demo
     ports:
@@ -41,3 +41,7 @@ services:
       - ./data/images:/scanpix/data/images
       - /etc/ssl:/etc/ssl
     restart: always
+
+networks:
+  default:
+    name: scanpix_network
