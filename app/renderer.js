@@ -103,24 +103,21 @@ searchBar.addEventListener('keydown', (e) => {
 
 function displayPrompts() {
     const promptDiv = document.getElementById('prompts');
-    const prompts = [
-        "pug",
-        "pug eating dinner",
-        "pug with a cone",
-        "waterfall",
-        "outdoors"
-    ]
-    prompts.forEach(function (item, index) {
-        var promptEle = document.createElement("a");
-        promptEle.className = "ui label white prompts";
-        promptEle.innerHTML = item;
-        promptEle.addEventListener("click", function(){
-            console.log(this.innerHTML);
-            document.getElementById('search-bar').value = this.innerHTML;
-            document.getElementById('search-button').click();
-        })
-        promptDiv.appendChild(promptEle)
-    });
+    $.getScript("./constants.js").done(function(){
+        console.log("prompts: ", prompts);
+        prompts.forEach(function (item, index) {
+            var promptEle = document.createElement("a");
+            promptEle.className = "ui label white prompts";
+            promptEle.innerHTML = item;
+            promptEle.addEventListener("click", function(){
+                console.log(this.innerHTML);
+                document.getElementById('search-bar').value = this.innerHTML;
+                document.getElementById('search-button').click();
+            })
+            promptDiv.appendChild(promptEle)
+        });
+    })
+    
 }
 
 window.onload = function initStuff(){
