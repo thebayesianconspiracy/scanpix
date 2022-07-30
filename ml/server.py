@@ -11,6 +11,7 @@ from media_processor import MediaProcessor
 
 INDEX_LOC = None
 IMG_LOC = None
+IMG_INDEX = None
 RESULT_LIMIT = 100
 SCORE_THRESHOLD = 0.20
 TEMPLATE_DIR = os.path.abspath('app')
@@ -22,9 +23,7 @@ app = Flask(__name__, template_folder=TEMPLATE_DIR, static_folder=STATIC_FOLDER,
 
 @app.route("/")
 def hello_world():
-    with open(f'{INDEX_LOC}/index.json', 'r') as fob:
-        img_index = json.load(fob)
-    return render_template('index.html', loc=INDEX_LOC, imgs=len(img_index), mode=MODE)
+    return render_template('index.html', loc=INDEX_LOC, imgs=len(IMG_INDEX), mode=MODE)
 
 
 @app.route("/image/<path:name>")
@@ -47,20 +46,18 @@ def process_text():
 
 @app.route("/search")
 def search():
-    with open(f'{INDEX_LOC}/index.json', 'r') as fob:
-        img_index = json.load(fob)
+    assert IMG_INDEX
     text = request.args.get('text', type=str)
     if text == "":
-        img_index.reverse()
-        result_count = len(img_index)
-        result = [(index['file_name'], i) for i, index in enumerate(img_index)]
+        result_count = len(IMG_INDEX)
+        result = [(index['file_name'], i) for i, index in enumerate(IMG_INDEX)]
         random.shuffle(result)
         result = result[:RESULT_LIMIT]
         row_id = -1
     else:
         embedding = media_processor.process_text(text)['clip_embedding']
         result = []
-        for index in tqdm(img_index):
+        for index in tqdm(IMG_INDEX):
             score = np.dot(embedding, index['clip_embedding'])
             if score > SCORE_THRESHOLD:
                 result.append((index['file_name'], score))
@@ -73,7 +70,7 @@ def search():
             connection.commit()
             row_id = cur.lastrowid
 
-    return jsonify({'results': result, 'total_images': len(img_index), 'result_count': result_count, 'row_id': row_id})
+    return jsonify({'results': result, 'total_images': len(IMG_INDEX), 'result_count': result_count, 'row_id': row_id})
 
 
 @app.route("/feedback", methods=['POST'])
@@ -99,6 +96,9 @@ if __name__ == '__main__':
         cur = connection.cursor()
         cur.execute("CREATE TABLE IF NOT EXISTS queries (ts timestamp, query text, results int, feedback int)")
         connection.commit()
+
+    with open(f'{INDEX_LOC}/index.json', 'r') as fob:
+        IMG_INDEX = json.load(fob)
 
     media_processor = MediaProcessor()
     app.run(host="0.0.0.0", port=5001, debug=True)
