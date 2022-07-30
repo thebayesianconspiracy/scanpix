@@ -24,7 +24,6 @@ services:
       - 7070:7070
     volumes:
       - ./data:/worker-app/data
-      - ./.indexer_progress_bar:/worker-app/.indexer_progress_bar
     environment:
     - MODE=${MODE}
   reverse-proxy:

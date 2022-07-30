@@ -48,7 +48,7 @@ def index_unwatched_files():
     write_to_progress_bar()
 
     for file_name in directory_iterator:
-        if (check_if_image(file_name) and (not check_if_image_in_index(index_list, file_name))):
+        if check_if_image(file_name) and (not check_if_image_in_index(index_list, file_name)):
             json_res = indexer.index(file_name, f"/worker-app/data/images/{file_name}")
             indexer.dump_to_json(json_res)
             indexer_metadata.add_images_indexed_count(1)
@@ -132,7 +132,7 @@ def disconnect():
 
 
 if __name__ == "__main__":
-    socket_io.connect("http://scanpix:5001")
+    socket_io.connect("http://scanpix-server:5001")
     index_unwatched_files()
     paths = ["/worker-app/data/images"]
     w = Watcher(paths, WatchHandler(), True)

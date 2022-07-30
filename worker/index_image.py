@@ -3,7 +3,7 @@ import json
 import os
 from singleton_decorator import singleton
 
-BASEURL = "http://scanpix:5001/process_image"
+BASEURL = "http://scanpix-server:5001/process_image"
 
 
 def append_to_json(filepath, data):
