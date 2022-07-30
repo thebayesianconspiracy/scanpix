@@ -2,15 +2,16 @@ import os
 import json
 import argparse
 import numpy as np
-from tqdm import tqdm
 import sqlite3
+import random
+from tqdm import tqdm
 from datetime import datetime
 from flask import Flask, jsonify, request, render_template, send_from_directory
 from media_processor import MediaProcessor
 
 INDEX_LOC = None
 IMG_LOC = None
-RESULT_LIMIT = 25
+RESULT_LIMIT = 100
 SCORE_THRESHOLD = 0.20
 TEMPLATE_DIR = os.path.abspath('app')
 STATIC_FOLDER = os.path.abspath('app')
@@ -34,6 +35,7 @@ def serve_image(name):
 @app.route("/process_image")
 def process_image():
     url = request.args.get('url', type=str)
+    print(url)
     return jsonify(media_processor.process_image(url))
 
 
@@ -50,7 +52,10 @@ def search():
     text = request.args.get('text', type=str)
     if text == "":
         img_index.reverse()
-        result = [(index['file_name'], index['file_location'], i) for i, index in enumerate(img_index)][:RESULT_LIMIT]
+        result_count = len(img_index)
+        result = [(index['file_name'], i) for i, index in enumerate(img_index)]
+        random.shuffle(result)
+        result = result[:RESULT_LIMIT]
         row_id = -1
     else:
         embedding = media_processor.process_text(text)['clip_embedding']
@@ -58,16 +63,17 @@ def search():
         for index in tqdm(img_index):
             score = np.dot(embedding, index['clip_embedding'])
             if score > SCORE_THRESHOLD:
-                result.append((index['file_name'], index['file_location'], score))
-        result = sorted(result, key=lambda x: x[2], reverse=True)[:RESULT_LIMIT]
+                result.append((index['file_name'], score))
+        result_count = len(result)
+        result = sorted(result, key=lambda x: x[1], reverse=True)[:RESULT_LIMIT]
 
         with sqlite3.connect(os.path.join(INDEX_LOC, 'scanpix.db')) as connection:
             cur = connection.cursor()
-            cur.execute("insert into queries values (?, ?, ?, ?)", (datetime.now(), text, len(result), 0))
+            cur.execute("insert into queries values (?, ?, ?, ?)", (datetime.now(), text, result_count, 0))
             connection.commit()
             row_id = cur.lastrowid
 
-    return jsonify({'results': result, 'total_images': len(img_index), 'row_id': row_id})
+    return jsonify({'results': result, 'total_images': len(img_index), 'result_count': result_count, 'row_id': row_id})
 
 
 @app.route("/feedback", methods=['POST'])

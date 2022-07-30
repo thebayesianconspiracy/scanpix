@@ -44,7 +44,6 @@ class Indexer:
         img_path = re.sub("worker-app","scanpix",img_path)
         res = requests.get(url=BASEURL, params={'url': img_path }).json()
         res['file_name'] = img_name
-        res['file_location'] = img_path
         print("got transformed image from server!")
         return res
 

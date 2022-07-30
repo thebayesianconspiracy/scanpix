@@ -1,6 +1,5 @@
-function getImageLocation(img_path){
-    var temp = img_path.split("/");
-    return "/image/" + temp[temp.length - 1];
+function getImageLocation(img_name){
+    return "/image/" + img_name;
 }
 
 
@@ -11,7 +10,7 @@ function displayImages(imageScores){
     
     const items = [];
     imageScores.forEach(function (item, index) {
-        const itemLoc = getImageLocation(item[1]);
+        const itemLoc = getImageLocation(item[0]);
         var itemText = item[0];
         // itemText = itemText + ": " + String(Math.round(item[2] * 100.0) / 100.0);
         console.log(itemLoc, itemText);
@@ -46,7 +45,7 @@ function displayResult(data){
     results.style.display = 'block';
 
     $("#results-meta-text").html("");
-    let innerHTML = "Relevant Results: " + data.results.length + " / " + data.total_images +" images<br>";
+    let innerHTML = "Relevant Results: " + data.result_count + " / " + data.total_images +" images<br>";
     if(data.row_id >= 0){
         innerHTML += "<div class='feedback row middle-xs center-xs'><div class='ui inverted button icon green feedback-btn' data-feedback='positive'><i class='green thumbs up icon' style='pointer-events: none'></i></div><div class='ui inverted button icon red feedback-btn' data-feedback='negative'><i class='red thumbs down icon' style='pointer-events: none'></i></div></div><p id='thanks' style='display:none'>Thanks for the feedback!</p>";
     }
@@ -80,7 +79,7 @@ function getEmbedding(){
     fetch(url).then(function(response) {
         return response.json();
     }).then(function(data) {
-        console.log("Number of relevant results: ", data.results.length);
+        console.log("Number of relevant results: ", data.result_count);
         console.log("Total images: ", data.total_images);
         displayResult(data);
     }).catch(function(e) {

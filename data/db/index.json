@@ -771,8 +771,7 @@
             -0.013933011540619501
         ],
         "hash": "8f4343f7effe0000",
-        "file_name": "7.jpg",
-        "file_location": "/home/nuwandavek/Documents/rocketship/scanpix/data/images/7.jpg"
+        "file_name": "7.jpg"
     },
     {
         "clip_embedding": [
@@ -1546,8 +1545,7 @@
             0.036416384102174924
         ],
         "hash": "ffffffff00000000",
-        "file_name": "3.jpg",
-        "file_location": "/home/nuwandavek/Documents/rocketship/scanpix/data/images/3.jpg"
+        "file_name": "3.jpg"
     },
     {
         "clip_embedding": [
@@ -2321,8 +2319,7 @@
             0.001246902460379418
         ],
         "hash": "80800c0f87e7830f",
-        "file_name": "4.jpg",
-        "file_location": "/home/nuwandavek/Documents/rocketship/scanpix/data/images/4.jpg"
+        "file_name": "4.jpg"
     },
     {
         "clip_embedding": [
@@ -3096,8 +3093,7 @@
             0.02585794727681459
         ],
         "hash": "f7f64010c6c38680",
-        "file_name": "9.jpg",
-        "file_location": "/home/nuwandavek/Documents/rocketship/scanpix/data/images/9.jpg"
+        "file_name": "9.jpg"
     },
     {
         "clip_embedding": [
@@ -3871,8 +3867,7 @@
             0.012905020983029973
         ],
         "hash": "01074e1e3e931230",
-        "file_name": "1.jpg",
-        "file_location": "/home/nuwandavek/Documents/rocketship/scanpix/data/images/1.jpg"
+        "file_name": "1.jpg"
     },
     {
         "clip_embedding": [
@@ -4646,8 +4641,7 @@
             0.0049992559855948845
         ],
         "hash": "f0f8e8e0e0e0e0f0",
-        "file_name": "5.jpg",
-        "file_location": "/home/nuwandavek/Documents/rocketship/scanpix/data/images/5.jpg"
+        "file_name": "5.jpg"
     },
     {
         "clip_embedding": [
@@ -5421,8 +5415,7 @@
             0.01138094930420284
         ],
         "hash": "fffe6e7f01808303",
-        "file_name": "10.jpg",
-        "file_location": "/home/nuwandavek/Documents/rocketship/scanpix/data/images/10.jpg"
+        "file_name": "10.jpg"
     },
     {
         "clip_embedding": [
@@ -6196,8 +6189,7 @@
             -0.001989155852619262
         ],
         "hash": "7f3f713840051c3e",
-        "file_name": "6.jpg",
-        "file_location": "/home/nuwandavek/Documents/rocketship/scanpix/data/images/6.jpg"
+        "file_name": "6.jpg"
     },
     {
         "clip_embedding": [
@@ -6971,8 +6963,7 @@
             0.03443577693560208
         ],
         "hash": "c7e3e1818183dffc",
-        "file_name": "8.jpg",
-        "file_location": "/home/nuwandavek/Documents/rocketship/scanpix/data/images/8.jpg"
+        "file_name": "8.jpg"
     },
     {
         "clip_embedding": [
@@ -7746,7 +7737,6 @@
             -0.028743391004184177
         ],
         "hash": "32003c3d3f0e0406",
-        "file_name": "2.jpg",
-        "file_location": "/home/nuwandavek/Documents/rocketship/scanpix/data/images/2.jpg"
+        "file_name": "2.jpg"
     }
 ]
