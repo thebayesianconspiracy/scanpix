@@ -28,6 +28,6 @@ if [ $INDEX = 1 ]; then
     DOCKER_COMMAND="${DOCKER_COMMAND} --profile index"
 fi
 
-DOCKER_COMMAND="${DOCKER_COMMAND} up -d"
+DOCKER_COMMAND="${DOCKER_COMMAND} up -d --remove-orphans"
 echo $DOCKER_COMMAND
 $DOCKER_COMMAND
