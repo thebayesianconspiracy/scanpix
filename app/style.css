@@ -72,6 +72,9 @@ img{
     #ham{
         display: block;
     }
+    #ham-on{
+        display: none;
+    }
 }
 @media (min-width: 64em) {
     #sidebar{
@@ -116,6 +119,11 @@ img{
 .normal-font{
     font-size: 1rem !important;
     color: #fff !important;
+}
+
+.normal-font-light{
+    font-size: 1rem !important;
+    color: black !important;
 }
 
 code{

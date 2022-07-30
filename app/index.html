@@ -33,7 +33,8 @@
             <h1 id="jumbo-title">scanpix</h1>
           </div>
           <div class="ui button secondary icon" id="ham">
-            <i class="hamburger icon"></i>
+            <i class="hamburger icon" id="ham-off"></i>
+            <i class="arrow left icon" id="ham-on"></i>
           </div>
         </div>
         <div class="col-xs-12 col-md-8 col-md-offset-2 center-xs" id="img-section">
@@ -58,6 +59,11 @@
             </div>
           </div>
           <div id="img-list"></div>  
+          <div id="no-result">
+            <i class="ghost icon" style="font-size: 7rem"></i>
+            <p class="normal-font-light">There was no good match!</p>
+            <p class="normal-font-light"><b><i class="lightbulb icon"></i>Pro tip:</b> Use a longer or a more specific query, as opposed to single words.</p>
+          </div>  
         </div>
       </div>
       <div class="row col-md-3 col-xs-12 center-xs top-xs" id="sidebar">
@@ -76,6 +82,10 @@
             </a>
           </div>
         </div>
+        <div class="col-md-11  side-block">
+          <p class="instruction">Try these Prompts</p>
+          <div id="prompts" class="row middle-xs"></div>
+        </div>
         <div class="col-md-11 side-block">
           <p class="instruction">Status</p>
           <p class="normal-font"><i class="inverted eye icon"></i> <code>{{ loc }}</code></p>
@@ -93,10 +103,6 @@
             <div class="bar"> <div class="progress"></div></div>
             <div class="label normal-font">{{ imgs }} / {{ imgs }} images indexed</div>
           </div>
-        </div>
-        <div class="col-md-11  side-block">
-          <p class="instruction">Try these Prompts</p>
-          <div id="prompts" class="row middle-xs"></div>
         </div>
         <div class="col-md-11  side-block">
           <p class="instruction">Attribution</p>
