@@ -22,7 +22,7 @@ class Indexer_Metadata:
         self.images_total += count
 
 
-'''initializing Indexer releated classes'''
+'''initializing Indexer related classes'''
 indexer_metadata = Indexer_Metadata()
 indexer = Indexer()
 
@@ -32,7 +32,7 @@ def write_to_progress_bar():
     send_payload(payload)
 
 
-''' function to index all exisiting files not included in index.json initially'''
+''' function to index all existing files not included in index.json initially'''
 
 
 def index_unwatched_files():
@@ -83,7 +83,7 @@ class Watcher:
         print("\nWatcher Terminated\n")
 
 
-'''Custom Handler class to handle events retured by the watcher'''
+'''Custom Handler class to handle events returned by the watcher'''
 
 
 class WatchHandler(FileSystemEventHandler):
