@@ -164,3 +164,7 @@ code{
     position: relative;
     min-height: 300px;
 }
+
+#loader{
+    top: 50vh !important;
+}
