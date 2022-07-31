@@ -36,8 +36,8 @@ body{
 }
 
 img{
-    width: auto !important;
-    height: 100% !important;
+    width: auto;
+    height: auto;
 }
 
 .image{

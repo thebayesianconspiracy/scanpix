@@ -9,7 +9,7 @@ function displayImages(imageScores){
     console.log(imageScores);
     const imgList = document.getElementById("img-list");
     imgList.innerHTML = '';
-    
+
     const items = [];
     imageScores.forEach(function (item, index) {
         const itemLoc = getImageLocation(item[0]);
@@ -36,16 +36,16 @@ function displayImages(imageScores){
         thumbnailLabel: { valign: "bottom", position: 'overImage', align: 'left' },
         viewerGalleryTWidth: 100,
         viewerGalleryTHeight: 100,
-      
+
         items: items
-      });
+    });
 
     $('.image img')
-    .visibility({
-        type       : 'image',
-        transition : 'fade in',
-        duration   : 1000
-    });
+        .visibility({
+            type       : 'image',
+            transition : 'fade in',
+            duration   : 1000
+        });
 }
 
 
@@ -129,7 +129,7 @@ function displayPrompts() {
             promptDiv.appendChild(promptEle)
         });
     })
-    
+
 }
 
 function toggleit(){
@@ -153,4 +153,22 @@ window.onload = function initStuff(){
         toggleit();
     });
     getEmbedding();
-} 
+}
+
+/* IndexerUI Update */
+const indexerStatusLabel = document.getElementById("indexer-status-label")
+
+function performUpdate(data) {
+    let status_list = data.split('_')
+    let percentage = String(Math.floor(Number(status_list[0]) / Number(status_list[1]) * 100))
+    $('#indexer-progress').progress({
+        percent: percentage
+    });
+    indexerStatusLabel.innerHTML = String(status_list[0]) + "/" + String(status_list[1]) + " images indexed"
+}
+
+function updateIndexerProgress() {
+    fetch("/indexer-progress").then(response => response.text()).then(text => performUpdate(text))
+}
+
+setInterval(updateIndexerProgress, 300)

@@ -6,9 +6,9 @@ WORKDIR worker-app/
 # Copying directories and installing dependencies
 COPY worker/ .
 COPY ../utils utils/
-RUN  pip3 install watchdog requests singleton-decorator
+RUN  pip3 install watchdog requests singleton-decorator "python-socketio[client]" simple-websocket
 
-EXPOSE 5000
+EXPOSE 7070
 
 # start monitoring
 RUN chmod +x start_worker.sh
