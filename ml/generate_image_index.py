@@ -10,7 +10,6 @@ img_index = []
 for img in tqdm(imgs):
     res = requests.get(url=f"{BASEURL}", params={'url': f"{IMG_PATH}/{img}"}).json()
     res['file_name'] = img
-    res['file_location'] = os.path.abspath(f"{IMG_PATH}/{img}")
     img_index.append(res)
 
 OUTPUT_PATH = "../data/"

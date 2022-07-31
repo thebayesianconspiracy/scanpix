@@ -44,10 +44,17 @@ This project consists of two almost parallel tracks: `research` and `software`. 
 # Usage (ToDo: Add better instructions!)
 
 ## Running using Docker Compose (Recommended)
-Starting the ml server in docker consists of 2 steps:
-* Build the image -> ``docker-compose build``
-* start the container -> ``docker-compose up -d``
+```
+# Build and start the app
+BUILD=1 ./run_docker.sh start
 
+# Or if you want to start the indexer too
+BUILD=1 INDEX=1 ./run_docker.sh start
+
+# Stop the app
+./run_docker.sh stop
+
+```
 Once the server has started you can go to `0.0.0.0:5001` to see the frontend or open the jupyter notebook to interact with the server. It takes a little while the first time as it download all necessary models.
 
 
@@ -65,8 +72,3 @@ cd ml && python server.py --index-loc ../data/
 # 2. Running the notebook
 cd nbs && jupyter notebook
 ```
-
----
-## Questions to think about
-- Do we ever learn from multiple users? How do we get feedback on performance/quality? User generated? Self generated?
-- How do we push new models?
