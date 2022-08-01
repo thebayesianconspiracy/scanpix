@@ -86,25 +86,20 @@ def feedback():
     return jsonify({"message": "success"})
 
 
-class IndexerProgressMap:
-    def __init__(self):
-        self.progress = "0_0"
-
-    def set(self, data):
-        self.progress = data
-
-    def get(self):
-        return self.progress
-
-
-indexerProgressMap = IndexerProgressMap()
-
-
 @socket.on("indexer_progress_event")
 def handle_indexer_progress_event(data):
     app.logger.info(f"progress => {data}")
     emit("send_progress_to_frontend", data, broadcast=True)
-    indexerProgressMap.set(data)
+    ratio = int(data.split('_')[0]) // int(data.split('_')[1])
+    if ratio == 1:
+        app.logger.info("Indexing Complete, reloading JSON!")
+        load_index_json()
+
+
+def load_index_json():
+    global IMG_INDEX
+    with open(f'{INDEX_LOC}/index.json', 'r') as fob:
+        IMG_INDEX = json.load(fob)
 
 
 if __name__ == '__main__':
@@ -120,8 +115,6 @@ if __name__ == '__main__':
         cur.execute("CREATE TABLE IF NOT EXISTS queries (ts timestamp, query text, results int, feedback int)")
         connection.commit()
 
-    with open(f'{INDEX_LOC}/index.json', 'r') as fob:
-        IMG_INDEX = json.load(fob)
-
+    load_index_json()
     media_processor = MediaProcessor()
     socket.run(app, host="0.0.0.0", port=5001, debug=True)
