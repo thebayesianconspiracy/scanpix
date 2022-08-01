@@ -103,13 +103,8 @@ indexerProgressMap = IndexerProgressMap()
 @socket.on("indexer_progress_event")
 def handle_indexer_progress_event(data):
     app.logger.info(f"progress => {data}")
+    emit("send_progress_to_frontend", data, broadcast=True)
     indexerProgressMap.set(data)
-
-
-# endpoint to which the websocket payload received is dumped
-@app.route("/indexer-progress")
-def indexer_progress():
-    return indexerProgressMap.get()
 
 
 if __name__ == '__main__':
