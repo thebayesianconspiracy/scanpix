@@ -20,7 +20,6 @@ MODE = os.getenv('MODE', "local")
 
 app = Flask(__name__, template_folder=TEMPLATE_DIR, static_folder=STATIC_FOLDER, static_url_path='')
 
-
 @app.route("/")
 def hello_world():
     return render_template('index.html', loc=INDEX_LOC, imgs=len(IMG_INDEX), mode=MODE)
@@ -31,11 +30,15 @@ def serve_image(name):
     return send_from_directory(IMG_LOC, name)
 
 
+@app.errorhandler(403)
 @app.route("/process_image")
 def process_image():
-    url = request.args.get('url', type=str)
-    print(url)
-    return jsonify(media_processor.process_image(url))
+    if MODE == "local":
+        url = request.args.get('url', type=str)
+        print(url)
+        return jsonify(media_processor.process_image(url))
+    else:
+        return jsonify(error="403"), 403
 
 
 @app.route("/process_text")
