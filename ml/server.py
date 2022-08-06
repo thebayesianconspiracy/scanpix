@@ -13,6 +13,7 @@ from media_processor import MediaProcessor
 INDEX_LOC = None
 IMG_LOC = None
 IMG_INDEX = None
+LOAD_TOGGLE_ON_COMPLETE_INDEXING = True
 RESULT_LIMIT = 100
 SCORE_THRESHOLD = 0.20
 TEMPLATE_DIR = os.path.abspath('app')
@@ -88,12 +89,23 @@ def feedback():
 
 @socket.on("indexer_progress_event")
 def handle_indexer_progress_event(data):
+    global LOAD_TOGGLE_ON_COMPLETE_INDEXING
     app.logger.info(f"progress => {data}")
     emit("send_progress_to_frontend", data, broadcast=True)
     ratio = int(data.split('_')[0]) // int(data.split('_')[1])
+    reload_json(ratio)
+
+
+# ensures index is loaded only once everytime it first reaches 100%
+def reload_json(ratio):
+    global LOAD_TOGGLE_ON_COMPLETE_INDEXING
     if ratio == 1:
-        app.logger.info("Indexing Complete, reloading JSON!")
-        load_index_json()
+        if LOAD_TOGGLE_ON_COMPLETE_INDEXING:
+            app.logger.info("Indexing Complete, reloading JSON!")
+            load_index_json()
+            LOAD_TOGGLE_ON_COMPLETE_INDEXING = False
+    else:
+        LOAD_TOGGLE_ON_COMPLETE_INDEXING = True
 
 
 def load_index_json():
