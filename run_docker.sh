@@ -26,6 +26,7 @@ fi
 
 if [ $INDEX -eq 1 ]; then
     echo "---STARTING INDEXER---"
+    export MODE="local"
     DOCKER_COMMAND="${DOCKER_COMMAND} --profile index"
 fi
 

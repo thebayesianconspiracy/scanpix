@@ -9,11 +9,13 @@ from collections import defaultdict
 from tqdm import tqdm
 from datetime import datetime
 from flask import Flask, jsonify, request, render_template, send_from_directory
+from flask_socketio import SocketIO, send, emit
 from media_processor import MediaProcessor
 
 INDEX_LOC = None
 IMG_LOC = None
 IMG_INDEX = None
+LOAD_TOGGLE_ON_COMPLETE_INDEXING = True
 RESULT_LIMIT = 100
 SCORE_THRESHOLD = 0.20
 TEMPLATE_DIR = os.path.abspath('app')
@@ -34,6 +36,7 @@ class SessionID:
 
 
 app = Flask(__name__, template_folder=TEMPLATE_DIR, static_folder=STATIC_FOLDER, static_url_path='')
+socket = SocketIO(app)
 SESSION_ID = SessionID()
 
 
@@ -105,6 +108,33 @@ def feedback():
     return jsonify({"message": "success"})
 
 
+@socket.on("indexer_progress_event")
+def handle_indexer_progress_event(data):
+    global LOAD_TOGGLE_ON_COMPLETE_INDEXING
+    app.logger.info(f"progress => {data}")
+    emit("send_progress_to_frontend", data, broadcast=True)
+    ratio = int(data.split('_')[0]) // int(data.split('_')[1])
+    reload_json(ratio)
+
+
+# ensures index is loaded only once everytime it first reaches 100%
+def reload_json(ratio):
+    global LOAD_TOGGLE_ON_COMPLETE_INDEXING
+    if ratio == 1:
+        if LOAD_TOGGLE_ON_COMPLETE_INDEXING:
+            app.logger.info("Indexing Complete, reloading JSON!")
+            load_index_json()
+            LOAD_TOGGLE_ON_COMPLETE_INDEXING = False
+    else:
+        LOAD_TOGGLE_ON_COMPLETE_INDEXING = True
+
+
+def load_index_json():
+    global IMG_INDEX
+    with open(f'{INDEX_LOC}/index.json', 'r') as fob:
+        IMG_INDEX = json.load(fob)
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--index-loc', type=str, help='location of the index file', default="../data/")
@@ -119,8 +149,6 @@ if __name__ == '__main__':
             "CREATE TABLE IF NOT EXISTS queries (sid text, ts timestamp, query text, results int, feedback int)")
         connection.commit()
 
-    with open(f'{INDEX_LOC}/index.json', 'r') as fob:
-        IMG_INDEX = json.load(fob)
-
+    load_index_json()
     media_processor = MediaProcessor()
-    app.run(host="0.0.0.0", port=5001, debug=True)
+    socket.run(app, host="0.0.0.0", port=5001, debug=True)
