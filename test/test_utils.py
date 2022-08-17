@@ -1,10 +1,11 @@
 import unittest
-from utils.util import extract_filename,check_if_image
+from utils.util import extract_filename, check_if_image
+
 
 class TestWatcher(unittest.TestCase):
 
     def test_extract_filename(self):
-        self.assertEqual(extract_filename("/home/what/abcd_efgh.jpg"),"abcd_efgh.jpg")
+        self.assertEqual(extract_filename("/home/what/abcd_efgh.jpg"), "abcd_efgh.jpg")
 
     def test_check_if_image(self):
         self.assertTrue(check_if_image("abcdef.jpg"))

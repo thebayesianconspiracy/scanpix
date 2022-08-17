@@ -1,12 +1,16 @@
+import os
+
 import numpy as np
 from transformers import CLIPProcessor, CLIPModel
 from helpers import get_image_from_url
 import imagehash
 
+from utils.constants import project_root
+
 
 class ClipModel:
     def __init__(self):
-        self.model = CLIPModel.from_pretrained("models/clip-vit-large-patch14")
+        self.model = CLIPModel.from_pretrained(f"{project_root}/models/clip-vit-large-patch14")
         self.processor = CLIPProcessor.from_pretrained("models/clip-vit-large-patch14")
 
     def get_embedding(self, input, type):
@@ -24,7 +28,7 @@ class ClipModel:
         return embedding.ravel().tolist()
 
 
-class MediaProcessor():
+class MediaProcessor:
     def __init__(self):
         self.clip_model = ClipModel()
 

@@ -1,6 +1,7 @@
 data/*
 !data/db/index.json
 !data/images
+data/user-images
 */__pycache__/
 */.ipynb_checkpoints/
 .DS_Store
