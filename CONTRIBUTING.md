@@ -5,7 +5,7 @@ Finding Issues that Need Help
 --- 
 
 If you're new to the project and want to help, but don't know where to start, we have a semi-curated list of issues that should not need deep knowledge of the system.
-[Have a look and see if anything sounds interesting]()
+[Have a look and see if anything sounds interesting](https://github.com/thebayesianconspiracy/scanpix/issues?q=is:issue+is:open+label:%22good+first+issue%22)
 
 Setting Up Dev Environment
 ---
