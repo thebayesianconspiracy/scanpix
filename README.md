@@ -71,4 +71,6 @@ cd ml && python server.py --index-loc ../data/
 
 # 2. Running the notebook
 cd nbs && jupyter notebook
+
+# 3. Running the indexer
 ```

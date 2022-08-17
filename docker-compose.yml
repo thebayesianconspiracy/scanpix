@@ -5,6 +5,9 @@ services:
       context: .
       dockerfile: Dockerfile
     image: scanpix-server
+    profiles:
+      - local
+      - demo
     ports:
       - "5001:5001"
     volumes:
@@ -20,6 +23,7 @@ services:
     profiles:
       - demo
       - index
+#      - local
     ports:
       - "5000:5000"
     volumes:
