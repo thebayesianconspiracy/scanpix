@@ -4,6 +4,8 @@ import argparse
 import numpy as np
 import sqlite3
 import random
+import hashlib
+from collections import defaultdict
 from tqdm import tqdm
 from datetime import datetime
 from flask import Flask, jsonify, request, render_template, send_from_directory
@@ -20,12 +22,29 @@ TEMPLATE_DIR = os.path.abspath('app')
 STATIC_FOLDER = os.path.abspath('app')
 MODE = os.getenv('MODE', "local")
 
+
+class SessionID:
+    def __init__(self):
+        self.session_id = defaultdict(lambda: "")
+
+    def set_id(self, key, value):
+        if self.session_id[key] == "":
+            self.session_id[key] = value
+
+    def get_id(self, key):
+        return self.session_id[key]
+
+
 app = Flask(__name__, template_folder=TEMPLATE_DIR, static_folder=STATIC_FOLDER, static_url_path='')
 socket = SocketIO(app)
+SESSION_ID = SessionID()
 
 
 @app.route("/")
 def hello_world():
+    session_id_key = request.remote_addr + str(datetime.now().hour)
+    session_id_hash = hashlib.sha256(session_id_key.encode('utf-8')).hexdigest()
+    SESSION_ID.set_id(session_id_key, session_id_hash)
     return render_template('index.html', loc=INDEX_LOC, imgs=len(IMG_INDEX), mode=MODE)
 
 
@@ -49,6 +68,7 @@ def process_text():
 
 @app.route("/search")
 def search():
+    session_id_key = request.remote_addr + str(datetime.now().hour)
     assert IMG_INDEX
     text = request.args.get('text', type=str)
     if text == "":
@@ -69,7 +89,8 @@ def search():
 
         with sqlite3.connect(os.path.join(INDEX_LOC, 'scanpix.db')) as connection:
             cur = connection.cursor()
-            cur.execute("insert into queries values (?, ?, ?, ?)", (datetime.now(), text, result_count, 0))
+            cur.execute("insert into queries values (?, ?, ?, ?, ?)",
+                        (SESSION_ID.get_id(session_id_key), datetime.now(), text, result_count, 0))
             connection.commit()
             row_id = cur.lastrowid
 
@@ -124,7 +145,8 @@ if __name__ == '__main__':
 
     with sqlite3.connect(os.path.join(INDEX_LOC, 'scanpix.db')) as connection:
         cur = connection.cursor()
-        cur.execute("CREATE TABLE IF NOT EXISTS queries (ts timestamp, query text, results int, feedback int)")
+        cur.execute(
+            "CREATE TABLE IF NOT EXISTS queries (sid text, ts timestamp, query text, results int, feedback int)")
         connection.commit()
 
     load_index_json()

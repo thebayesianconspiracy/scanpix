@@ -20,11 +20,13 @@ if [ $DEMO -eq 1 ]; then
     export MODE="demo"
     DOCKER_COMMAND="${DOCKER_COMMAND} --profile demo"
 else
+    echo "----SETTING LOCAL MODE---"
     export MODE="local"
 fi
 
 if [ $INDEX -eq 1 ]; then
     echo "---STARTING INDEXER---"
+    export MODE="local"
     DOCKER_COMMAND="${DOCKER_COMMAND} --profile index"
 fi
 
