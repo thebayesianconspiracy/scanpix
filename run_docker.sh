@@ -20,6 +20,7 @@ if [ $DEMO -eq 1 ]; then
     export MODE="demo"
     DOCKER_COMMAND="${DOCKER_COMMAND} --profile demo"
 else
+    echo "----SETTING LOCAL MODE---"
     export MODE="local"
 fi
 
