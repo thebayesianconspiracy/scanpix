@@ -4,8 +4,12 @@ function getImageLocation(img_name) {
     return "/image/" + img_name;
 }
 
+function getVideoLocation(video_name) {
+    return "/video/" + video_name
+}
 
-function displayImages(imageScores) {
+
+function displayMedia(imageScores) {
     console.log(imageScores);
     const imgList = document.getElementById("img-list");
     imgList.innerHTML = '';
@@ -18,6 +22,9 @@ function displayImages(imageScores) {
         console.log(itemLoc, itemText);
         items.push({src: itemLoc, srct: itemLoc, title: itemText})
     });
+
+    //pushing videos
+    items.push({src: "/video/sample_1.mp4", srct: "/video/sample_1.mp4", title: "og_bunny_vid"})
 
     if (items.length == 0) {
         $("#no-result").show();
@@ -35,7 +42,6 @@ function displayImages(imageScores) {
         thumbnailLabel: {valign: "bottom", position: 'overImage', align: 'left'},
         viewerGalleryTWidth: 100,
         viewerGalleryTHeight: 100,
-
         items: items
     });
 
@@ -77,7 +83,7 @@ function displayResult(data) {
             console.log(e);
         });
     })
-    displayImages(data.results);
+    displayMedia(data.results);
 }
 
 function getEmbedding() {

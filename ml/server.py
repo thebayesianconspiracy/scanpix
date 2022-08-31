@@ -14,6 +14,7 @@ from media_processor import MediaProcessor
 
 INDEX_LOC = None
 IMG_LOC = None
+VID_LOC = None
 IMG_INDEX = None
 LOAD_TOGGLE_ON_COMPLETE_INDEXING = True
 RESULT_LIMIT = 100
@@ -51,6 +52,10 @@ def hello_world():
 @app.route("/image/<path:name>")
 def serve_image(name):
     return send_from_directory(IMG_LOC, name)
+
+@app.route("/video/<path:name>")
+def serve_video(name):
+    return send_from_directory(VID_LOC, name)
 
 
 @app.route("/process_image")
@@ -142,6 +147,7 @@ if __name__ == '__main__':
 
     INDEX_LOC = os.path.abspath(os.path.join(args.index_loc, "db"))
     IMG_LOC = os.path.abspath(os.path.join(args.index_loc, "images"))
+    VID_LOC = os.path.abspath(os.path.join(args.index_loc, "videos"))
 
     with sqlite3.connect(os.path.join(INDEX_LOC, 'scanpix.db')) as connection:
         cur = connection.cursor()
@@ -151,4 +157,4 @@ if __name__ == '__main__':
 
     load_index_json()
     media_processor = MediaProcessor()
-    socket.run(app, host="0.0.0.0", port=5001, debug=True)
+    socket.run(app, host="0.0.0.0", port=5001, debug=True, allow_unsafe_werkzeug=True)
