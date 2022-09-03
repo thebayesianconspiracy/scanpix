@@ -53,9 +53,15 @@ def hello_world():
 def serve_image(name):
     return send_from_directory(IMG_LOC, name)
 
+
 @app.route("/video/<path:name>")
 def serve_video(name):
     return send_from_directory(VID_LOC, name)
+
+
+@app.route("/thumbnail/<path:name>")
+def serve_thumbnail(name):
+    return send_from_directory(VID_LOC + "/thumbnails", name)
 
 
 @app.route("/process_image")

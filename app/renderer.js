@@ -8,6 +8,10 @@ function getVideoLocation(video_name) {
     return "/video/" + video_name
 }
 
+function getThumbNailLocation(video_name) {
+    return "/thumbnail/" + video_name
+}
+
 
 function displayMedia(imageScores) {
     console.log(imageScores);
@@ -24,7 +28,7 @@ function displayMedia(imageScores) {
     });
 
     //pushing videos
-    items.push({src: "/video/sample_1.mp4", srct: "/video/sample_1.mp4", title: "og_bunny_vid"})
+    items.push({src: getVideoLocation("sample_1.mp4"), srct: getThumbNailLocation("sample_1.png"), title: "og_bunny_vid"})
 
     if (items.length == 0) {
         $("#no-result").show();
