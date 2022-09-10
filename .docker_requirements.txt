@@ -7,5 +7,6 @@ pillow==9.0.1
 requests==2.27.1
 transformers==4.19.2
 imagehash
+six
 torch
 torchvision
