@@ -11,6 +11,7 @@ from datetime import datetime
 from flask import Flask, jsonify, request, render_template, send_from_directory
 from flask_socketio import SocketIO, send, emit
 from media_processor import MediaProcessor
+from helpers import watermark_thumbnails
 
 INDEX_LOC = None
 IMG_LOC = None
@@ -147,6 +148,7 @@ def load_index_json():
 
 
 if __name__ == '__main__':
+    watermark_thumbnails()
     parser = argparse.ArgumentParser()
     parser.add_argument('--index-loc', type=str, help='location of the index file', default="../data/")
     args = parser.parse_args()
