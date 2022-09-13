@@ -24,11 +24,16 @@ function displayMedia(imageScores) {
         var itemText = item[0];
         // itemText = itemText + ": " + String(Math.round(item[2] * 100.0) / 100.0);
         console.log(itemLoc, itemText);
-        items.push({src: itemLoc, srct: itemLoc, title: itemText})
+        items.push({src: itemLoc, srct: itemLoc, title: itemText, description: "Image"})
     });
 
     //pushing videos
-    items.push({src: getVideoLocation("sample_1.mp4"), srct: getThumbNailLocation("sample_1.png"), title: "og_bunny_vid"})
+    items.push({
+        src: getVideoLocation("sample_1.mp4"),
+        srct: getThumbNailLocation("watermarked_sample_1.png"),
+        title: "og_bunny_vid",
+        description: "Video"
+    })
 
     if (items.length == 0) {
         $("#no-result").show();
