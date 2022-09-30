@@ -10,3 +10,4 @@ imagehash
 six
 torch
 torchvision
+opencv-python
