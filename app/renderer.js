@@ -13,8 +13,9 @@ function getThumbNailLocation(video_name) {
 }
 
 
-function displayMedia(imageScores) {
+function displayMedia(imageScores, videoScores) {
     console.log(imageScores);
+    console.log(videoScores);
     const imgList = document.getElementById("img-list");
     imgList.innerHTML = '';
 
@@ -28,12 +29,18 @@ function displayMedia(imageScores) {
     });
 
     //pushing videos
-    items.push({
-        src: getVideoLocation("sample_1.mp4"),
-        srct: getThumbNailLocation("watermarked_sample_1.png"),
-        title: "og_bunny_vid",
-        description: "Video"
-    })
+    videoScores.forEach(function (item, index) {
+        const itemLoc = getVideoLocation(item[0]);
+        var itemText = item[0];
+        var thumbNailName = "watermarked_" + item[0] + "_frame_1.jpg";
+        console.log(itemLoc, itemText, thumbNailName)
+        items.push({
+            src: itemLoc,
+            srct: getThumbNailLocation(thumbNailName),
+            title: itemText,
+            description: "Video"
+        })
+    });
 
     if (items.length == 0) {
         $("#no-result").show();
@@ -92,7 +99,7 @@ function displayResult(data) {
             console.log(e);
         });
     })
-    displayMedia(data.results);
+    displayMedia(data.image_results, data.video_results);
 }
 
 function getEmbedding() {

@@ -32,27 +32,39 @@ def write_to_progress_bar():
     send_payload(payload)
 
 
+def update_index_json(image_root_path, image_name, index_list):
+    if check_if_image(image_name) and (not check_if_image_in_index(index_list, image_name)):
+        json_res = indexer.index(image_name, f"{image_root_path}/{image_name}")
+        indexer.dump_to_json(json_res)
+        indexer_metadata.add_images_indexed_count(1)
+        write_to_progress_bar()
+
+
 ''' function to index all existing files not included in index.json initially'''
 
 
 def index_unwatched_files():
     print("indexing unwatched files....")
-    indexer = Indexer()
     with open("/worker-app/data/db/index.json") as f:
         raw_data = f.read()
     index_list = json.loads(raw_data)
 
-    directory_iterator = os.listdir("/worker-app/data/images")
-    indexer_metadata.add_images_total_count(len(directory_iterator))
+    image_directory_iterator = os.listdir("/worker-app/data/images")
+    video_frames_directory_iterator = os.listdir("/worker-app/data/videos/frames")
+    indexer_metadata.add_images_total_count(len(image_directory_iterator) + len(video_frames_directory_iterator))
     indexer_metadata.add_images_indexed_count(len(index_list))
     write_to_progress_bar()
 
-    for file_name in directory_iterator:
-        if check_if_image(file_name) and (not check_if_image_in_index(index_list, file_name)):
-            json_res = indexer.index(file_name, f"/worker-app/data/images/{file_name}")
-            indexer.dump_to_json(json_res)
-            indexer_metadata.add_images_indexed_count(1)
-            write_to_progress_bar()
+    images_root_path = "/worker-app/data/images"
+    frames_root_path = "/worker-app/data/videos/frames"
+
+    # indexing images
+    for image_name in image_directory_iterator:
+        update_index_json(images_root_path, image_name, index_list)
+
+    # indexing frames
+    for frame_name in video_frames_directory_iterator:
+        update_index_json(frames_root_path, frame_name, index_list)
 
 
 ''' watcher class to monitor directories '''
