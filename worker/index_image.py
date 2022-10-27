@@ -2,6 +2,7 @@ import requests
 import json
 import os
 from singleton_decorator import singleton
+from utils.util import get_video_name_from_frame, get_frame_number, check_if_image
 
 BASEURL = "http://scanpix-server:5001/process_image"
 
@@ -43,8 +44,10 @@ class Indexer:
         import re
         img_path = re.sub("worker-app", "scanpix", img_path)
         res = requests.get(url=BASEURL, params={'url': img_path}).json()
-        res['file_name'] = img_name
-        print("got transformed image from server!")
+        res['file_name'] = get_video_name_from_frame(img_name, "/scanpix/data/videos")
+        res['frame_number'] = get_frame_number(img_name, "/scanpix/data/videos")
+        res['type'] = "image" if check_if_image(res["file_name"]) else "video"
+        print(f"indexed {img_name}!")
         return res
 
     def dump_to_json(self, json_index):

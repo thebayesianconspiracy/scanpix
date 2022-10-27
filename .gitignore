@@ -1,6 +1,4 @@
 data/*
-!data/db/index.json
-!data/images
 */__pycache__/
 */.ipynb_checkpoints/
 .DS_Store
@@ -8,3 +6,4 @@ models/*
 !models/README.md
 .idea
 web_socket_client.py
+benchmark/

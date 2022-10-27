@@ -11,7 +11,6 @@ from datetime import datetime
 from flask import Flask, jsonify, request, render_template, send_from_directory
 from flask_socketio import SocketIO, send, emit
 from media_processor import MediaProcessor
-from helpers import watermark_thumbnails
 
 INDEX_LOC = None
 IMG_LOC = None
@@ -85,19 +84,31 @@ def search():
     text = request.args.get('text', type=str)
     if text == "":
         result_count = len(IMG_INDEX)
-        result = [(index['file_name'], i) for i, index in enumerate(IMG_INDEX)]
-        random.shuffle(result)
-        result = result[:RESULT_LIMIT]
+        video_result = defaultdict(lambda: [])
+        image_result = [(index['file_name'], i) for i, index in enumerate(IMG_INDEX) if index["type"] == "image"]
+        random.shuffle(image_result)
+        image_result = image_result[:RESULT_LIMIT]
+        if len(image_result) != RESULT_LIMIT:
+            for i, index in enumerate(IMG_INDEX):
+                if index["type"] == "video":
+                    video_result[index["file_name"]].append((-1, index["frame_number"]))
+
+        video_result = list(sorted(video_result.items()))
         row_id = -1
     else:
         embedding = media_processor.process_text(text)['clip_embedding']
-        result = []
+        image_result = []
+        video_result = defaultdict(lambda: [])
         for index in tqdm(IMG_INDEX):
             score = np.dot(embedding, index['clip_embedding'])
             if score > SCORE_THRESHOLD:
-                result.append((index['file_name'], score))
-        result_count = len(result)
-        result = sorted(result, key=lambda x: x[1], reverse=True)[:RESULT_LIMIT]
+                if index["type"] == "image":
+                    image_result.append((index['file_name'], score))
+                else:
+                    video_result[index["file_name"]].append((score, index["frame_number"]))
+        result_count = len(image_result) + len(video_result)
+        image_result = sorted(image_result, key=lambda x: x[1], reverse=True)[:RESULT_LIMIT]
+        video_result = list(sorted(video_result.items()))
 
         with sqlite3.connect(os.path.join(INDEX_LOC, 'scanpix.db')) as connection:
             cur = connection.cursor()
@@ -106,7 +117,10 @@ def search():
             connection.commit()
             row_id = cur.lastrowid
 
-    return jsonify({'results': result, 'total_images': len(IMG_INDEX), 'result_count': result_count, 'row_id': row_id})
+    print(">>>> ", video_result)
+
+    return jsonify({'image_results': image_result, "video_results": video_result, 'total_images': len(IMG_INDEX),
+                    'result_count': result_count, 'row_id': row_id})
 
 
 @app.route("/feedback", methods=['POST'])
@@ -148,7 +162,6 @@ def load_index_json():
 
 
 if __name__ == '__main__':
-    watermark_thumbnails()
     parser = argparse.ArgumentParser()
     parser.add_argument('--index-loc', type=str, help='location of the index file', default="../data/")
     args = parser.parse_args()

@@ -1,4 +1,5 @@
 import re
+import os
 
 
 def check_if_image(file_name):
@@ -23,3 +24,20 @@ def check_if_image_in_index(index_list, file_name):
         if (index["file_name"] == file_name):
             return True
     return False
+
+
+def get_video_name_from_frame(name, video_path):
+    if "_frame_" in name:
+        video_name = re.search("(.*)_frame_.*", name)[1]
+        if video_name:
+            return video_name
+    return name
+
+
+def get_frame_number(name, video_path):
+    if "_frame_" in name:
+        frame_number = re.search(".*_frame_(.*)\.", name)[1]
+        video_name = re.search("(.*)_frame_.*", name)[1]
+        if video_name:
+            return frame_number
+    return -1
