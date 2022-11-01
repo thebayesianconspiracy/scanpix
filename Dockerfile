@@ -11,6 +11,7 @@ EXPOSE 5001
 # copy directories
 COPY ml/ ml/
 COPY app/ app/
+COPY utils/ ml/utils/
 
 # start server
 CMD ["python3", "ml/server.py", "--index-loc", "/scanpix/data"]

@@ -41,3 +41,27 @@ def get_frame_number(name, video_path):
         if video_name:
             return frame_number
     return -1
+
+
+# FPS calculated approximately by tallying total duration of a video with the number of frames generated
+APPROX_FPS = 1.2
+
+
+def get_timestamp(frame_number, fps):
+    from math import floor
+    seconds = floor(int(frame_number) * 25 // 30)
+
+    def convert_to_hms(seconds):
+        hours = seconds // 3600
+        minutes = (seconds % 3600) // 60
+        seconds = (seconds % 3600) % 60
+        hms = ""
+        if hours > 0:
+            hms += str(hours) + "h"
+        if minutes > 0:
+            hms += str(minutes) + "m"
+        if seconds > 0:
+            hms += str(seconds) + "s"
+        return hms
+
+    return convert_to_hms(seconds)
