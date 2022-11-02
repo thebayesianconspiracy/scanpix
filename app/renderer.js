@@ -20,7 +20,7 @@ function displayMedia(imageScores, videoScores) {
     imgList.innerHTML = '';
 
     const items = [];
-    imageScores.forEach(function (item, index) {
+    imageScores.forEach(function (item) {
         const itemLoc = getImageLocation(item[0]);
         var itemText = item[0];
         // itemText = itemText + ": " + String(Math.round(item[2] * 100.0) / 100.0);
@@ -29,11 +29,12 @@ function displayMedia(imageScores, videoScores) {
     });
 
     //pushing videos
-    videoScores.forEach(function (item, index) {
+    videoScores.forEach(function (item) {
         const itemLoc = getVideoLocation(item[0]);
         var itemText = item[0];
         var thumbNailName = "watermarked_" + item[0] + "_frame_1.jpg";
         console.log(itemLoc, itemText, thumbNailName)
+
         items.push({
             src: itemLoc,
             srct: getThumbNailLocation(thumbNailName),
@@ -41,6 +42,30 @@ function displayMedia(imageScores, videoScores) {
             description: "Video"
         })
     });
+
+    function getTimestamp(src, videoScores) {
+        console.log(">>>>>>")
+        console.log(src)
+        var timestamp = 0
+        videoScores.forEach(function(item) {
+            var videoSrc = ("http://0.0.0.0:5001/video/"+item[0]).replaceAll(' ',"%20")
+            console.log(videoSrc, videoSrc === src)
+            if(videoSrc === src) {
+                if(item[1][0][0]!==-1) {
+                    timestamp = item[1][0][2]
+                }
+            }
+        })
+        return timestamp
+    }
+
+    imgList.addEventListener("click", function (){
+            var videoElement = document.getElementsByTagName("video")
+            console.log(`video Elements size ->${videoElement.length}`)
+            var timeStamp = getTimestamp(videoElement[1].getElementsByTagName("source")[0].src, videoScores)
+            console.log(`time -> ${timeStamp}`)
+            videoElement[1].currentTime = timeStamp
+    })
 
     if (items.length == 0) {
         $("#no-result").show();
