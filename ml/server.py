@@ -11,6 +11,7 @@ from datetime import datetime
 from flask import Flask, jsonify, request, render_template, send_from_directory
 from flask_socketio import SocketIO, send, emit
 from media_processor import MediaProcessor
+from utils.util import get_timestamp, APPROX_FPS
 
 INDEX_LOC = None
 IMG_LOC = None
@@ -91,7 +92,8 @@ def search():
         if len(image_result) != RESULT_LIMIT:
             for i, index in enumerate(IMG_INDEX):
                 if index["type"] == "video":
-                    video_result[index["file_name"]].append((-1, index["frame_number"]))
+                    video_result[index["file_name"]].append(
+                        (-1, index["frame_number"], get_timestamp(index["frame_number"], APPROX_FPS)))
 
         video_result = list(sorted(video_result.items()))
         row_id = -1
@@ -105,7 +107,10 @@ def search():
                 if index["type"] == "image":
                     image_result.append((index['file_name'], score))
                 else:
-                    video_result[index["file_name"]].append((score, index["frame_number"]))
+                    video_result[index["file_name"]].append(
+                        (score, index["frame_number"], get_timestamp(index["frame_number"], APPROX_FPS)))
+                    video_result[index["file_name"]].sort(key=lambda x: -x[0])
+
         result_count = len(image_result) + len(video_result)
         image_result = sorted(image_result, key=lambda x: x[1], reverse=True)[:RESULT_LIMIT]
         video_result = list(sorted(video_result.items()))
