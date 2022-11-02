@@ -19,26 +19,27 @@ function displayMedia(imageScores, videoScores) {
     const imgList = document.getElementById("img-list");
     imgList.innerHTML = '';
 
-    const items = [];
-    imageScores.forEach(function (item) {
-        const itemLoc = getImageLocation(item[0]);
-        var itemText = item[0];
-        // itemText = itemText + ": " + String(Math.round(item[2] * 100.0) / 100.0);
-        console.log(itemLoc, itemText);
-        items.push({src: itemLoc, srct: itemLoc, title: itemText, description: "Image"})
+    const imagesAndVideosToBeRendered = [];
+    imageScores.forEach(function (imageScore) {
+        const imageLoc = getImageLocation(imageScore[0]);
+        const imageText = imageScore[0];
+        console.log(imageLoc, imageText);
+        // use same image as thumbnail
+        imagesAndVideosToBeRendered.push({src: imageLoc, srct: imageLoc, title: imageText, description: "Image"})
     });
 
     //pushing videos
-    videoScores.forEach(function (item) {
-        const itemLoc = getVideoLocation(item[0]);
-        var itemText = item[0];
-        var thumbNailName = "watermarked_" + item[0] + "_frame_1.jpg";
-        console.log(itemLoc, itemText, thumbNailName)
+    videoScores.forEach(function (videoScore) {
+        // videoScore is of the structure [video_src_path, [(score, frame_number, timestamp in s),....]]
+        const videoLoc = getVideoLocation(videoScore[0]);
+        const videoText = videoScore[0];
+        const thumbNailName = "watermarked_" + videoScore[0] + "_frame_1.jpg";
+        console.log(videoLoc, videoText, thumbNailName)
 
-        items.push({
-            src: itemLoc,
+        imagesAndVideosToBeRendered.push({
+            src: videoLoc,
             srct: getThumbNailLocation(thumbNailName),
-            title: itemText,
+            title: videoText,
             description: "Video"
         })
     });
@@ -47,12 +48,14 @@ function displayMedia(imageScores, videoScores) {
         console.log(">>>>>>")
         console.log(src)
         var timestamp = 0
-        videoScores.forEach(function(item) {
-            var videoSrc = ("http://0.0.0.0:5001/video/"+item[0]).replaceAll(' ',"%20")
+        videoScores.forEach(function(videoScore) {
+            // videoScore is of the structure [video_src_path, [(score, frame_number, timestamp in s),....]]
+            var videoSrc = ("http://0.0.0.0:5001/video/"+videoScore[0]).replaceAll(' ',"%20")
             console.log(videoSrc, videoSrc === src)
             if(videoSrc === src) {
-                if(item[1][0][0]!==-1) {
-                    timestamp = item[1][0][2]
+                const score = videoScore[1][0][0]
+                if(score !== -1) {
+                    timestamp = videoScore[1][0][2]
                 }
             }
         })
@@ -67,7 +70,7 @@ function displayMedia(imageScores, videoScores) {
             videoElement[1].currentTime = timeStamp
     })
 
-    if (items.length == 0) {
+    if (imagesAndVideosToBeRendered.length == 0) {
         $("#no-result").show();
     } else {
         $("#no-result").hide();
@@ -83,7 +86,7 @@ function displayMedia(imageScores, videoScores) {
         thumbnailLabel: {valign: "bottom", position: 'overImage', align: 'left'},
         viewerGalleryTWidth: 100,
         viewerGalleryTHeight: 100,
-        items: items
+        items: imagesAndVideosToBeRendered
     });
 
     $('.image img')
